@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.Button?>
+<AnchorPane fx:id="rootPane"
+            fx:controller="dp.grp4.views.IngredientsView"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400.0" prefWidth="600.0">
+    <Text text="IngredientsView"
+          x="10"
+          y="20"
+          stroke="black"
+          strokeWidth="0.5"/>
+    <Button layoutX="244.0" layoutY="146.0" mnemonicParsing="false" onMouseClicked="#gotoHome" prefHeight="26.0" prefWidth="119.0" text="home" />
+</AnchorPane>
