@@ -1,16 +1,14 @@
-package dp.grp4.controllers;
+package dp.grp4.orders;
 
 public interface OrderListener {
     /**
-     * Permet à un abonné de s'inscrire au près
-     * d'un lanceur d'ordres
-     * @param orderFirer : le générateur concerné
+     * Allows a subscriber to register with an order firer.
+     * @param orderFirer: the relevant order generator
      */
     void setSubscription(OrderFirer orderFirer);
     /**
-     * Permet de décrire le traitement en fonction
-     * de l'ordre reçu
-     * @param orderType
+     * Allows describing the processing based on the received order.
+     * @param orderType : order type
      */
     void processOrder(OrderType orderType);
 }

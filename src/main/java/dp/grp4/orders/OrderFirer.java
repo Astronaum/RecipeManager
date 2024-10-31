@@ -1,18 +1,18 @@
-package dp.grp4.controllers;
+package dp.grp4.orders;
 
 public interface OrderFirer {
     /**
-     * Permet d'enregistrer un abonné pour
-     * différents types d'événements
-     * @param orderListener
-     * @param types
+     * Allows registering a subscriber for
+     * different types of events.
+     * @param orderListener : order listener
+     * @param types : types
      */
     void subscription(OrderListener orderListener,
                     OrderType... types);
     /**
-     * Permet de diffuser un événement
-     * aux abonnés concernés
-     * @param e
+     * Allows broadcasting an event
+     * to the concerned subscribers.
+     * @param orderType order type
      */
-    void fireOrder(OrderType e);
+    void fireOrder(OrderType orderType);
 }

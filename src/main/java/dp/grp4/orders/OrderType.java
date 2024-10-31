@@ -1,4 +1,4 @@
-package dp.grp4.controllers;
+package dp.grp4.orders;
 
 public enum OrderType {
     SHOW_RECIPES,

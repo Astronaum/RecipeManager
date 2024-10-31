@@ -1,85 +1,39 @@
-package fr.insa.bourges.controleur;
+package dp.grp4.controllers;
 
-import fr.insa.bourges.modele.Cheval;
-import fr.insa.bourges.modele.FacadeGestionChevaux;
-import fr.insa.bourges.modele.exceptions.ConflitNomChevalException;
-import fr.insa.bourges.modele.exceptions.NomManquantException;
-import fr.insa.bourges.modele.exceptions.PoidsIncoherentException;
-import fr.insa.bourges.vues.GestionnaireVue;
+import dp.grp4.orders.OrderFirer;
+import dp.grp4.orders.OrderListener;
+import dp.grp4.orders.OrderType;
+import dp.grp4.views.ViewsManager;
 
 import java.util.*;
 
-public class Controleur implements LanceurOrdre{
+public class Controller implements OrderFirer {
 
+    private Map<OrderType, Collection<OrderListener>> orderListeners;
 
-    Map<TypeOrdre, Collection<EcouteurOrdre>> ecouteursOrdres;
-    FacadeGestionChevaux facadeGestionChevaux;
+    private Controller(){}
 
-    public Controleur(GestionnaireVue gestionnaireVue, FacadeGestionChevaux facadeGestionChevaux) {
-        this.facadeGestionChevaux = facadeGestionChevaux;
-        ecouteursOrdres = new HashMap<>();
-        Arrays.stream(TypeOrdre.values()).forEach(
-                t -> {
-                    ecouteursOrdres.put(t, new ArrayList<>());
-                }
+    public static void run(ViewsManager viewsManager) {
+        Controller controller=new Controller();
+        controller.orderListeners = new HashMap<>();
+        Arrays.stream(OrderType.values()).forEach(
+                t -> controller.orderListeners.put(t, new ArrayList<>())
         );
-        gestionnaireVue.setControleur(this);
-        gestionnaireVue.setAbonnement(this);
+        viewsManager.setController(controller);
+        viewsManager.setSubscription(controller);
 
-
+        controller.fireOrder(OrderType.SHOW_HOME);
     }
 
     @Override
-    public void abonnement(EcouteurOrdre ecouteurOrdre, TypeOrdre... types) {
-
-        for(TypeOrdre t : types) {
-            ecouteursOrdres.get(t).add(ecouteurOrdre);
-        }
-
-
+    public void subscription(OrderListener orderListener, OrderType... types) {
+        for(OrderType t : types)
+            orderListeners.get(t).add(orderListener);
     }
 
     @Override
-    public void fireOrdre(TypeOrdre e) {
-        ecouteursOrdres.get(e).forEach(e1 -> {e1.traiter(e);});
+    public void fireOrder(OrderType orderType) {
+        orderListeners.get(orderType).forEach(e1 -> e1.processOrder(orderType));
     }
 
-    public void run() {
-
-        this.fireOrdre(TypeOrdre.DATA_LOAD);
-        this.fireOrdre(TypeOrdre.SHOW_ACCUEIL);
-    }
-
-    public void gotoCreation() {
-        this.fireOrdre(TypeOrdre.SHOW_CREATION);
-    }
-
-    public void gotoChevaux() {
-        this.fireOrdre(TypeOrdre.SHOW_LISTE_CHEVAUX);
-    }
-
-    public void gotomenu() {
-        this.fireOrdre(TypeOrdre.SHOW_ACCUEIL);
-    }
-
-    public void creerCheval(String nom, int poids) {
-
-        try {
-            facadeGestionChevaux.creationCheval(nom,poids);
-            this.fireOrdre(TypeOrdre.DATA_CHEVAL_CREE);
-            this.fireOrdre(TypeOrdre.SHOW_LISTE_CHEVAUX);
-        } catch (NomManquantException e) {
-            this.fireOrdre(TypeOrdre.ERREUR_NOM_MANQUANT);
-        } catch (PoidsIncoherentException e) {
-            this.fireOrdre(TypeOrdre.ERREUR_POIDS_INCOHERENT);
-        } catch (ConflitNomChevalException e) {
-            this.fireOrdre(TypeOrdre.ERREUR_CONFLIT_NOM_CHEVAL);
-        }
-
-
-    }
-
-    public List<Cheval> getChevaux() {
-        return facadeGestionChevaux.getChevaux();
-    }
 }
