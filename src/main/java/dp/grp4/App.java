@@ -1,21 +1,16 @@
 package dp.grp4;
 
-import dp.grp4.controllers.Controller;
+import dp.grp4.orders.OrderType;
 import dp.grp4.views.ViewsManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
-
 public class App extends Application {
-
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage){
         ViewsManager viewsManager = ViewsManager.getInstance(stage);
-        Controller.run(viewsManager);
+        viewsManager.processOrder(OrderType.SHOW_HOME);
     }
-
     public static void main(String[] args) {
         launch();
     }

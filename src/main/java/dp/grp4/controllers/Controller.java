@@ -3,26 +3,19 @@ package dp.grp4.controllers;
 import dp.grp4.orders.OrderFirer;
 import dp.grp4.orders.OrderListener;
 import dp.grp4.orders.OrderType;
-import dp.grp4.views.ViewsManager;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
-public class Controller implements OrderFirer {
-
+public abstract class Controller implements OrderFirer {
     private Map<OrderType, Collection<OrderListener>> orderListeners;
 
-    private Controller(){}
+    public Map<OrderType, Collection<OrderListener>> getOrderListeners() {
+        return orderListeners;
+    }
 
-    public static void run(ViewsManager viewsManager) {
-        Controller controller=new Controller();
-        controller.orderListeners = new HashMap<>();
-        Arrays.stream(OrderType.values()).forEach(
-                t -> controller.orderListeners.put(t, new ArrayList<>())
-        );
-        viewsManager.setController(controller);
-        viewsManager.setSubscription(controller);
-
-        controller.fireOrder(OrderType.SHOW_HOME);
+    public void setOrderListeners(Map<OrderType, Collection<OrderListener>> orderListeners) {
+        this.orderListeners = orderListeners;
     }
 
     @Override
@@ -35,5 +28,4 @@ public class Controller implements OrderFirer {
     public void fireOrder(OrderType orderType) {
         orderListeners.get(orderType).forEach(e1 -> e1.processOrder(orderType));
     }
-
 }

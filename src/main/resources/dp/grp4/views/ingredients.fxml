@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.control.Button?>
-<AnchorPane fx:id="rootPane"
+<AnchorPane fx:id="root"
             fx:controller="dp.grp4.views.IngredientsView"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"

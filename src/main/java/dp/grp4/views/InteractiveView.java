@@ -9,10 +9,10 @@ import javafx.scene.Scene;
 import java.io.IOException;
 
 public abstract class InteractiveView {
-    private static final int WINDOW_WIDTH=600, WINDOW_HEIGHT=400;
+    private static final int WINDOW_WIDTH=1200, WINDOW_HEIGHT=800;
 
     @FXML
-    private Parent rootPane;
+    private Parent root;
     private Scene scene;
     private Controller controller;
 
@@ -26,7 +26,7 @@ public abstract class InteractiveView {
     }
 
     public void initialiseScene() {
-        this.scene = new Scene(rootPane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        this.scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
     public Scene getScene() {
         return scene;
