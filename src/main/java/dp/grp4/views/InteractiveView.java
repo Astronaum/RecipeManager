@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import java.io.IOException;
 
 public abstract class InteractiveView {
-    private static final int WINDOW_WIDTH=1200, WINDOW_HEIGHT=800;
+    private static final int WINDOW_WIDTH=1200, WINDOW_HEIGHT=700;
 
     @FXML
     private Parent root;
