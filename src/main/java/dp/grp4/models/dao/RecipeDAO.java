@@ -1,6 +1,7 @@
 package dp.grp4.models.dao;
 
 import dp.grp4.models.db.JsonDB;
+import dp.grp4.models.entities.Ingredient;
 import dp.grp4.models.entities.Recipe;
 
 import java.util.List;
@@ -96,6 +97,36 @@ public class RecipeDAO implements RecipeIDAO{
                     return matches;
                 })
                 .toList();
+    }
+
+    public void suggestRecipes(List<Ingredient> availableIngredients) {
+        List<Recipe> allRecipes = getAll();  // Fetch all recipes
+        for (Recipe recipe : allRecipes) {
+            int totalIngredients = recipe.getIngredientsIds().size();
+            int availableCount = 0;
+
+            // Count available ingredients for the recipe
+            for (Long ingredientId : recipe.getIngredientsIds()) {
+                for (Ingredient ingredient : availableIngredients) {
+                    if (ingredient.getId() == ingredientId && ingredient.getQuantity() > 0) {
+                        availableCount++;
+                        break;
+                    }
+                }
+            }
+
+            double availablePercentage = (double) availableCount / totalIngredients;
+            if (availablePercentage == 1) {
+                // Suggest and mark as complete
+                System.out.println("Recipe: " + recipe.getName() + " - Complete (all ingredients available).");
+            } else if (availablePercentage > 0.5) {
+                // Suggest and mark as incomplete
+                System.out.println("Recipe: " + recipe.getName() + " - Incomplete (more than 50% ingredients available).");
+            } else {
+                // Do not suggest if less than 50% ingredients are available
+                System.out.println("Recipe: " + recipe.getName() + " - Not Suggested (less than 50% ingredients available).");
+            }
+        }
     }
 
 

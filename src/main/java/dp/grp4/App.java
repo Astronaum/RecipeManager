@@ -30,10 +30,18 @@ public class App extends Application {
                 .setId(1).setName("Salt").setUnit(Ingredient.Unit.g).setQuantity(120)
                 .build();
         Ingredient j=Ingredient.builder()
-                .setId(2).setName("oeuf").setUnit(Ingredient.Unit.unit).setQuantity(6)
+                .setId(2).setName("pepper").setUnit(Ingredient.Unit.g).setQuantity(0)
+                .build();
+        Ingredient k=Ingredient.builder()
+                .setId(3).setName("egg").setUnit(Ingredient.Unit.unit).setQuantity(6)
+                .build();
+        Ingredient l=Ingredient.builder()
+                .setId(4).setName("milk").setUnit(Ingredient.Unit.L).setQuantity(0)
                 .build();
         o.add(i);
         o.add(j);
+        o.add(k);
+        o.add(l);
         System.out.println(o.getAll());
         // o.delete(i.getId());
         //System.out.println(o.getAll());
@@ -41,7 +49,7 @@ public class App extends Application {
     private void example2(){
         RecipeDAO o=RecipeDAO.getInstance();
         Recipe i=Recipe.builder()
-                .setId(1).setName("Omelette").setCookingTime(12).setIngredientsIds(Arrays.asList(1L,2L)).setCategory(Recipe.Category.MAIN)
+                .setId(1).setName("Omelette").setCookingTime(12).setIngredientsIds(Arrays.asList(1L,2L,3L)).setCategory(Recipe.Category.MAIN)
                 .setInstructionsList(Arrays.asList(
                         "Crack the eggs into a bowl.",
                         "Whisk the eggs with salt.",
@@ -50,6 +58,9 @@ public class App extends Application {
                         "Cook until set, then fold and serve."
                 ))
                 .build();
+        Recipe l=Recipe.builder()
+                .setId(4).setName("Oeuf_bouillie").setCookingTime(12).setIngredientsIds(Arrays.asList(3L,2L,4L)).setCategory(Recipe.Category.MAIN)
+                .build();
         Recipe j=Recipe.builder()
                 .setId(2).setName("Tiramisu").setFavourite(true).setCategory(Recipe.Category.DESSERT)
                 .build();
@@ -57,8 +68,9 @@ public class App extends Application {
                 .setId(3).setName("Tea").setDifficulty(Recipe.Difficulty.EASY).setPreparationTime(30)
                 .build();
         o.add(i);
-        o.add(j);
-        o.add(k);
+        //o.add(j);
+        //o.add(k);
+        o.add(l);
         System.out.println(o.getAll());
 
         //Filter category
@@ -87,12 +99,20 @@ public class App extends Application {
 
         //filter name
         Map<String, Object> criteria3 = Map.of(
-                "name", "Tiramisu"
+                "name", "Tiramisu",
+                "preparationTime", 30
         );
 
         List<Recipe> filteredRecipes3 = o.filter(criteria3);
         filteredRecipes3.forEach(recipe -> System.out.println(recipe.getName()));
 
+
+        //Suggestion
+        IngredientDAO ingredientDAO = IngredientDAO.getInstance();
+        List<Ingredient> availableIngredients = ingredientDAO.getAll(); // This should be your list of available ingredients.
+
+        RecipeDAO recipeDAO = RecipeDAO.getInstance();
+        recipeDAO.suggestRecipes(availableIngredients);
 
         //o.delete(i.getId());
         //System.out.println(o.getAll());
