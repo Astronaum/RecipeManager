@@ -51,4 +51,52 @@ public class RecipeDAO implements RecipeIDAO{
         collection.remove(id);
         DB.setCollection(collectionName,collection);
     }
+
+    @Override
+    public List<Recipe> filter(Map<String, Object> criteria) {
+        Map<Long, Object> collection = DB.getCollection(collectionName);
+
+        return collection.values().stream()
+                .map(obj -> (Recipe) obj) // Cast objects to Recipe
+                .filter(recipe -> {
+                    boolean matches = false; // Start with OR logic (no match initially)
+                    for (Map.Entry<String, Object> entry : criteria.entrySet()) {
+                        String key = entry.getKey();
+                        Object value = entry.getValue();
+
+                        // Apply filtering conditions for each key
+                        switch (key) {
+                            case "category":
+                                if (value instanceof Recipe.Category)
+                                    matches = matches || recipe.getCategory() == value;
+                                break;
+                            case "difficulty":
+                                if (value instanceof Recipe.Difficulty)
+                                    matches = matches || recipe.getDifficulty() == value;
+                                break;
+                            case "favourite":
+                                if (value instanceof Boolean)
+                                    matches = matches || recipe.isFavourite() == (Boolean) value;
+                                break;
+                            case "preparationTime":
+                                if (value instanceof Integer)
+                                    matches = matches || recipe.getPreparationTime() == (Integer) value;
+                                break;
+                            case "name":
+                                if (value instanceof String)
+                                    matches = matches || recipe.getName().toLowerCase().contains(((String) value).toLowerCase());
+                                break;
+                            default:
+                                throw new IllegalArgumentException("Unsupported filter key: " + key);
+                        }
+
+                        // Stop checking further if a condition is satisfied
+                        if (matches) break;
+                    }
+                    return matches;
+                })
+                .toList();
+    }
+
+
 }

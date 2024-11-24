@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 import java.io.IOException;
 
 public class JsonDB {
-    private static final String DATABASE_FOLDER="C:\\Users\\yassi\\Downloads\\JsonDB";
+    private static final String DATABASE_FOLDER="C:\\Users\\astro\\Desktop\\JsonDB";
     private static final JsonDB INSTANCE=new JsonDB();
     private final List<Collection> collections;
     private record Collection(String name,Class<?> className){}
@@ -80,4 +80,5 @@ public class JsonDB {
         this.data.put(collectionName,collection);
         this.writeCollectionToDB(collectionName);
     }
+
 }

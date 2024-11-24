@@ -9,7 +9,7 @@ public class Ingredient {
     private Unit unit;
     private LocalDate expirationDate;
     public enum Unit{
-        KG,g,L
+        KG,g,L,unit
     }
     public long getId() {
         return id;
