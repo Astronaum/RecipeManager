@@ -38,10 +38,14 @@ public class App extends Application {
         Ingredient l=Ingredient.builder()
                 .setId(4).setName("milk").setUnit(Ingredient.Unit.L).setQuantity(0)
                 .build();
+        Ingredient m=Ingredient.builder()
+                .setId(5).setName("Tea").setUnit(Ingredient.Unit.g).setQuantity(200)
+                .build();
         o.add(i);
         o.add(j);
         o.add(k);
         o.add(l);
+        o.add(m);
         System.out.println(o.getAll());
         // o.delete(i.getId());
         //System.out.println(o.getAll());
@@ -65,11 +69,11 @@ public class App extends Application {
                 .setId(2).setName("Tiramisu").setFavourite(true).setCategory(Recipe.Category.DESSERT)
                 .build();
         Recipe k=Recipe.builder()
-                .setId(3).setName("Tea").setDifficulty(Recipe.Difficulty.EASY).setPreparationTime(30)
+                .setId(3).setName("Tea").setIngredientsIds(Arrays.asList(5L)).setDifficulty(Recipe.Difficulty.EASY).setPreparationTime(30)
                 .build();
         o.add(i);
         //o.add(j);
-        //o.add(k);
+        o.add(k);
         o.add(l);
         System.out.println(o.getAll());
 
@@ -78,32 +82,32 @@ public class App extends Application {
                 "category", Recipe.Category.MAIN
         );
 
-        List<Recipe> filteredRecipes = o.filter(criteria);
-        filteredRecipes.forEach(recipe -> System.out.println(recipe.getName()));
+        //List<Recipe> filteredRecipes = o.filter(criteria, false);
+        //filteredRecipes.forEach(recipe -> System.out.println(recipe.getName()));
 
         //filter difficulty
         Map<String, Object> criteria1 = Map.of(
                 "difficulty", Recipe.Difficulty.EASY
         );
 
-        List<Recipe> filteredRecipes1 = o.filter(criteria1);
-        filteredRecipes1.forEach(recipe -> System.out.println(recipe.getName()));
+        //List<Recipe> filteredRecipes1 = o.filter(criteria1, false);
+        //filteredRecipes1.forEach(recipe -> System.out.println(recipe.getName()));
 
         //filter preparationtime
         Map<String, Object> criteria2 = Map.of(
                 "preparationTime", 30
         );
 
-        List<Recipe> filteredRecipes2 = o.filter(criteria2);
-        filteredRecipes2.forEach(recipe -> System.out.println(recipe.getName()));
+        //List<Recipe> filteredRecipes2 = o.filter(criteria2, false);
+        //filteredRecipes2.forEach(recipe -> System.out.println(recipe.getName()));
 
         //filter name
         Map<String, Object> criteria3 = Map.of(
-                "name", "Tiramisu",
+                "name", "Oeuf_bouillie",
                 "preparationTime", 30
         );
 
-        List<Recipe> filteredRecipes3 = o.filter(criteria3);
+        List<Recipe> filteredRecipes3 = o.filter(criteria3, false);
         filteredRecipes3.forEach(recipe -> System.out.println(recipe.getName()));
 
 

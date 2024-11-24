@@ -11,5 +11,5 @@ public interface RecipeIDAO {
     Recipe getById(long id);
     void modify(Recipe recipe);
     void delete(long id);
-    public List<Recipe> filter(Map<String, Object> criteria);
+    public List<Recipe> filter(Map<String, Object> criteria, boolean OrAndChoice);
 }
