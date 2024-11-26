@@ -9,13 +9,13 @@ public class HomeController extends Controller {
     private HomeController(){}
 
     public static HomeController create(ViewsManager viewsManager) {
-        HomeController homeController=new HomeController();
-        homeController.setOrderListeners(new HashMap<>());
+        HomeController controller=new HomeController();
+        controller.setOrderListeners(new HashMap<>());
         Arrays.stream(OrderType.values()).forEach(
-                t -> homeController.getOrderListeners().put(t, new ArrayList<>())
+                t -> controller.getOrderListeners().put(t, new ArrayList<>())
         );
-        viewsManager.setSubscription(homeController);
-        return homeController;
+        viewsManager.setSubscription(controller);
+        return controller;
     }
     public void gotoRecipes(){
         this.fireOrder(OrderType.SHOW_RECIPES);

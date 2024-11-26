@@ -9,13 +9,13 @@ public class RecipesController extends Controller{
     private RecipesController(){}
 
     public static RecipesController create(ViewsManager viewsManager) {
-        RecipesController homeController=new RecipesController();
-        homeController.setOrderListeners(new HashMap<>());
+        RecipesController controller=new RecipesController();
+        controller.setOrderListeners(new HashMap<>());
         Arrays.stream(OrderType.values()).forEach(
-                t -> homeController.getOrderListeners().put(t, new ArrayList<>())
+                t -> controller.getOrderListeners().put(t, new ArrayList<>())
         );
-        viewsManager.setSubscription(homeController);
-        return homeController;
+        viewsManager.setSubscription(controller);
+        return controller;
     }
 
     public void gotoHome(){

@@ -9,11 +9,11 @@ import javafx.scene.Scene;
 import java.io.IOException;
 
 public abstract class InteractiveView {
-    private static final int WINDOW_WIDTH=1200, WINDOW_HEIGHT=700;
+    private static final int WINDOW_WIDTH=1000, WINDOW_HEIGHT=600;
 
     @FXML
     private Parent root;
-    private Scene scene;
+    protected Scene scene;
     private Controller controller;
 
     protected static InteractiveView getView(ViewsManager viewsManager,String fxmlFileName) throws IOException {
@@ -24,14 +24,12 @@ public abstract class InteractiveView {
         view.initialiseScene();
         return view;
     }
-
-    public void initialiseScene() {
+    private void initialiseScene() {
         this.scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
     public Scene getScene() {
-        return scene;
+        return this.scene;
     }
-
     public Controller getController() {
         return this.controller;
     }

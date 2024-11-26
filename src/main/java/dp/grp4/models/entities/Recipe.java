@@ -11,11 +11,12 @@ public class Recipe {
     private int cookingTime; // minutes
     private Difficulty difficulty;
     private Set<Criteria> criteriaSet;
-    private List<Long> ingredientsIds;
+    private List<IngredientQuantity> ingredients;
     private List<String> instructionsList;
     private int note; // x/10
     private String comment;
     private boolean favourite;
+    public record IngredientQuantity(long id,int quantity){}
     public enum Category{
         APPETIZER, MAIN, DESSERT
     }
@@ -68,11 +69,11 @@ public class Recipe {
     public void setCriteriaSet(Set<Criteria> criteriaSet) {
         this.criteriaSet = criteriaSet;
     }
-    public List<Long> getIngredientsIds() {
-        return ingredientsIds;
+    public List<IngredientQuantity> getIngredients() {
+        return ingredients;
     }
-    public void setIngredientsIds(List<Long> ingredientsIds) {
-        this.ingredientsIds = ingredientsIds;
+    public void setIngredients(List<IngredientQuantity> ingredients) {
+        this.ingredients = ingredients;
     }
     public List<String> getInstructionsList() {
         return instructionsList;
@@ -84,6 +85,8 @@ public class Recipe {
         return note;
     }
     public void setNote(int note) {
+        note= Math.min(note,10);
+        note= Math.max(note,0);
         this.note = note;
     }
     public String getComment() {
@@ -98,6 +101,8 @@ public class Recipe {
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
     }
+
+    public Recipe(){}
     public Recipe(Recipe.Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
@@ -106,7 +111,7 @@ public class Recipe {
         this.cookingTime = builder.cookingTime;
         this.difficulty = builder.difficulty;
         this.criteriaSet = builder.criteriaSet;
-        this.ingredientsIds = builder.ingredientsIds;
+        this.ingredients = builder.ingredients;
         this.instructionsList = builder.instructionsList;
         this.note = builder.note;
         this.comment = builder.comment;
@@ -123,7 +128,7 @@ public class Recipe {
         private int cookingTime; // minutes
         private Difficulty difficulty;
         private Set<Criteria> criteriaSet;
-        private List<Long> ingredientsIds;
+        private List<IngredientQuantity> ingredients;
         private List<String> instructionsList;
         private int note; // x/10
         private String comment;
@@ -164,8 +169,8 @@ public class Recipe {
             return this;
         }
 
-        public Recipe.Builder setIngredientsIds(List<Long> ingredientsIds) {
-            this.ingredientsIds = ingredientsIds;
+        public Recipe.Builder setIngredients(List<IngredientQuantity> ingredients) {
+            this.ingredients = ingredients;
             return this;
         }
 
@@ -175,6 +180,8 @@ public class Recipe {
         }
 
         public Recipe.Builder setNote(int note) {
+            note= Math.min(note,10);
+            note= Math.max(note,0);
             this.note = note;
             return this;
         }

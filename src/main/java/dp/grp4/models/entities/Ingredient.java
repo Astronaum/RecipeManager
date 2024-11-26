@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Ingredient {
     private long id;
     private String name;
-    private int quantity;
+    private int stock;
     private Unit unit;
     private LocalDate expirationDate;
     public enum Unit{
@@ -23,11 +23,11 @@ public class Ingredient {
     public void setName(String name) {
         this.name = name;
     }
-    public int getQuantity() {
-        return quantity;
+    public int getStock() {
+        return stock;
     }
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
     public Unit getUnit() {
         return unit;
@@ -41,10 +41,12 @@ public class Ingredient {
     public void setExpirationDate(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    public Ingredient(){}
     public Ingredient(Ingredient.Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.quantity = builder.quantity;
+        this.stock = builder.stock;
         this.unit = builder.unit;
         this.expirationDate = builder.expirationDate;
     }
@@ -54,7 +56,7 @@ public class Ingredient {
     public static class Builder{
         private long id;
         private String name;
-        private int quantity;
+        private int stock;
         private Unit unit;
         private LocalDate expirationDate;
         public Ingredient.Builder setId(long id) {
@@ -65,8 +67,8 @@ public class Ingredient {
             this.name = name;
             return this;
         }
-        public Ingredient.Builder setQuantity(int quantity) {
-            this.quantity = quantity;
+        public Ingredient.Builder setStock(int stock) {
+            this.stock = stock;
             return this;
         }
         public Ingredient.Builder setUnit(Unit unit) {

@@ -22,4 +22,8 @@ public class HomeView extends InteractiveView {
     public void gotoIngredients(MouseEvent e) {
         this.getController().gotoIngredients();
     }
+
+    public void openModal(MouseEvent e) {
+        this.getController().fireOrder(OrderType.SHOW_MODAL);
+    }
 }
