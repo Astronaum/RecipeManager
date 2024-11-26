@@ -18,11 +18,11 @@ public class Helper {
         });
     }
     public static void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.initOwner(ViewsManager.getInstance().getStage());
-        alert.show();
+//        Alert alert = new Alert(alertType);
+//        alert.setTitle(title);
+//        alert.setHeaderText(null);
+//        alert.setContentText(message);
+//        alert.initOwner(ViewsManager.getInstance().getStage());
+//        alert.show();
     }
 }
