@@ -12,7 +12,10 @@ import dp.grp4.views.ViewsManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class App extends Application {
     @Override
@@ -22,7 +25,7 @@ public class App extends Application {
             ViewsManager.getInstance().launch();
             clearDB();
             exampleAdd();
-            exampleDeleteUpdate();
+            //exampleDeleteUpdate();
         });
     }
     private void clearDB(){
@@ -45,22 +48,33 @@ public class App extends Application {
                 .setStock(10).setUnit(Ingredient.Unit.L).setName("Lait").setExpirationDate(LocalDate.now())
                 .build();
         Ingredient i2=Ingredient.builder()
-                .setStock(30).setUnit(Ingredient.Unit.unit).setName("Eggs").setExpirationDate(LocalDate.now())
+                .setStock(5).setUnit(Ingredient.Unit.unit).setName("Eggs").setExpirationDate(LocalDate.now())
                 .build();
         Ingredient i3=Ingredient.builder()
-                .setStock(15).setUnit(Ingredient.Unit.unit).setName("Oranges").setExpirationDate(LocalDate.now())
+                .setStock(1).setUnit(Ingredient.Unit.unit).setName("Oranges").setExpirationDate(LocalDate.now())
+                .build();
+
+        Ingredient i4=Ingredient.builder()
+                .setStock(0).setUnit(Ingredient.Unit.unit).setName("coffee").setExpirationDate(LocalDate.now())
+                .build();
+
+        Ingredient i5=Ingredient.builder()
+                .setStock(1).setUnit(Ingredient.Unit.unit).setName("Sugar").setExpirationDate(LocalDate.now())
                 .build();
 
         long idI1=ingredientDAO.add(i1);
         long idI2=ingredientDAO.add(i2);
         long idI3=ingredientDAO.add(i3);
+        long idI4=ingredientDAO.add(i4);
+        long idI5=ingredientDAO.add(i5);
+
 
         Recipe r=Recipe.builder()
-                .setName("Omelette").setCookingTime(12)
+                .setName("Omelette").setCookingTime(15)
                 .setIngredients(Arrays.asList(
                         new Recipe.IngredientQuantity(idI1,10),
                         new Recipe.IngredientQuantity(idI2,5),
-                        new Recipe.IngredientQuantity(idI3,3)
+                        new Recipe.IngredientQuantity(idI3,1)
                 ))
                 .setCategory(Recipe.Category.MAIN)
                 .setInstructionsList(Arrays.asList(
@@ -70,108 +84,74 @@ public class App extends Application {
                         "Pour the egg mixture into the pan.",
                         "Cook until set, then fold and serve."
                 ))
+                .setPreparationTime(30)
+                .setDifficulty(Recipe.Difficulty.EASY)
                 .build();
+
+        Recipe r_ =Recipe.builder()
+                .setName("Tiramisu").setCookingTime(12)
+                .setIngredients(Arrays.asList(
+                        new Recipe.IngredientQuantity(idI4,1),
+                        new Recipe.IngredientQuantity(idI2,3),
+                        new Recipe.IngredientQuantity(idI3,2)
+                ))
+                .setCategory(Recipe.Category.DESSERT)
+                .setInstructionsList(Arrays.asList(
+                        "Crack the eggs into a bowl.",
+                        "Whisk the eggs.",
+                        "Add coffee"
+                ))
+                .setFavourite(true)
+                .setPreparationTime(10)
+                .build();
+
+        Recipe r__ =Recipe.builder()
+                .setName("Hot coffee").setCookingTime(5)
+                .setIngredients(Arrays.asList(
+                        new Recipe.IngredientQuantity(idI4,1),
+                        new Recipe.IngredientQuantity(idI5,1)
+                ))
+                .setCategory(Recipe.Category.DESSERT)
+                .setFavourite(true)
+                .setPreparationTime(5)
+                .build();
+
+        recipeDAO.add(r__);
+        recipeDAO.add(r_);
         recipeDAO.add(r);
 
+        System.out.println("Testing filters ------------------");
+        List<Recipe> andRecipes = recipeDAO.filter(
+                null, Recipe.Category.MAIN, Recipe.Difficulty.EASY, null, null, true
+        );
+
+        List<Recipe> orRecipes = recipeDAO.filter(
+                null, Recipe.Category.MAIN, null, true, 10, false
+        );
+
+        System.out.println("Recipes with AND logic:");
+        andRecipes.forEach(recipe -> System.out.println(recipe.getName()));
+
+        System.out.println("Recipes with AND logic:");
+        orRecipes.forEach(recipe -> System.out.println(recipe.getName()));
+
+        System.out.println("Testing suggestions ------------------");
+        Map<String, List<Recipe>> categorizedRecipes = recipeDAO.suggestRecipes(IngredientDAO.getInstance().getAll());
+
+        List<Recipe> complete = categorizedRecipes.get("Complete");
+        List<Recipe> incomplete = categorizedRecipes.get("Incomplete");
+        List<Recipe> notSuggested = categorizedRecipes.get("Not Suggested");
+
+
+        System.out.println("Complete Recipes: " + complete.size());
+        complete.forEach(recipe -> System.out.println(recipe.getName()));
+        System.out.println("Incomplete Recipes: " + incomplete.size());
+        incomplete.forEach(recipe -> System.out.println(recipe.getName()));
+        System.out.println("Not Suggested Recipes: " + notSuggested.size());
+        notSuggested.forEach(recipe -> System.out.println(recipe.getName()));
     }
 
-//    private void example1() throws DBException {
-//        IngredientIDAO o=IngredientDAO.getInstance();
-//        Ingredient i=Ingredient.builder()
-//                .setId(1).setName("Salt").setUnit(Ingredient.Unit.g).setQuantity(120)
-//                .build();
-//        Ingredient j=Ingredient.builder()
-//                .setId(2).setName("pepper").setUnit(Ingredient.Unit.g).setQuantity(0)
-//                .build();
-//        Ingredient k=Ingredient.builder()
-//                .setId(3).setName("egg").setUnit(Ingredient.Unit.unit).setQuantity(6)
-//                .build();
-//        Ingredient l=Ingredient.builder()
-//                .setId(4).setName("milk").setUnit(Ingredient.Unit.L).setQuantity(0)
-//                .build();
-//        Ingredient m=Ingredient.builder()
-//                .setId(5).setName("Tea").setUnit(Ingredient.Unit.g).setQuantity(200)
-//                .build();
-//        o.add(i);
-//        o.add(j);
-//        o.add(k);
-//        o.add(l);
-//        o.add(m);
-//        System.out.println(o.getAll());
-//        // o.delete(i.getId());
-//        //System.out.println(o.getAll());
-//    }
-//    private void example2(){
-//        RecipeDAO o=RecipeDAO.getInstance();
-//        Recipe i=Recipe.builder()
-//                .setId(1).setName("Omelette").setCookingTime(12).setIngredientsIds(Arrays.asList(1L,2L,3L)).setCategory(Recipe.Category.MAIN)
-//                .setInstructionsList(Arrays.asList(
-//                        "Crack the eggs into a bowl.",
-//                        "Whisk the eggs with salt.",
-//                        "Heat a pan with",
-//                        "Pour the egg mixture into the pan.",
-//                        "Cook until set, then fold and serve."
-//                ))
-//                .build();
-//        Recipe l=Recipe.builder()
-//                .setId(4).setName("Oeuf_bouillie").setCookingTime(12).setIngredientsIds(Arrays.asList(3L,2L,4L)).setCategory(Recipe.Category.MAIN)
-//                .build();
-//        Recipe j=Recipe.builder()
-//                .setId(2).setName("Tiramisu").setFavourite(true).setCategory(Recipe.Category.DESSERT)
-//                .build();
-//        Recipe k=Recipe.builder()
-//                .setId(3).setName("Tea").setIngredientsIds(List.of(5L)).setDifficulty(Recipe.Difficulty.EASY).setPreparationTime(30)
-//                .build();
-//        o.add(i);
-//        //o.add(j);
-//        o.add(k);
-//        o.add(l);
-//        System.out.println(o.getAll());
-//
-//        //Filter category
-//        Map<String, Object> criteria = Map.of(
-//                "category", Recipe.Category.MAIN
-//        );
-//
-//        //List<Recipe> filteredRecipes = o.filter(criteria, false);
-//        //filteredRecipes.forEach(recipe -> System.out.println(recipe.getName()));
-//
-//        //filter difficulty
-//        Map<String, Object> criteria1 = Map.of(
-//                "difficulty", Recipe.Difficulty.EASY
-//        );
-//
-//        //List<Recipe> filteredRecipes1 = o.filter(criteria1, false);
-//        //filteredRecipes1.forEach(recipe -> System.out.println(recipe.getName()));
-//
-//        //filter preparationtime
-//        Map<String, Object> criteria2 = Map.of(
-//                "preparationTime", 30
-//        );
-//
-//        //List<Recipe> filteredRecipes2 = o.filter(criteria2, false);
-//        //filteredRecipes2.forEach(recipe -> System.out.println(recipe.getName()));
-//
-//        //filter name
-//        Map<String, Object> criteria3 = Map.of(
-//                "name", "Oeuf_bouillie",
-//                "preparationTime", 30
-//        );
-//
-//        List<Recipe> filteredRecipes3 = o.filter(criteria3, false);
-//        filteredRecipes3.forEach(recipe -> System.out.println(recipe.getName()));
-//
-//
-//        //Suggestion
-//        IngredientDAO ingredientDAO = IngredientDAO.getInstance();
-//        List<Ingredient> availableIngredients = ingredientDAO.getAll(); // This should be your list of available ingredients.
-//
-//        RecipeDAO recipeDAO = RecipeDAO.getInstance();
-//        recipeDAO.suggestRecipes(availableIngredients);
-//
-//        //o.delete(i.getId());
-//        //System.out.println(o.getAll());
-//    }
+
     public static void main(String[] args) {
         launch();
     }
