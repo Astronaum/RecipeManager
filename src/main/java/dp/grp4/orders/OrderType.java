@@ -4,5 +4,5 @@ public enum OrderType {
     SHOW_RECIPES,
     SHOW_INGREDIENTS,
     SHOW_HOME,
-    SHOW_MODAL
+    SHOW_CONFIRM_MODAL,
 }

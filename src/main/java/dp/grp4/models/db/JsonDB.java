@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dp.grp4.exceptions.DBException;
 import dp.grp4.exceptions.ExceptionHandler;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;

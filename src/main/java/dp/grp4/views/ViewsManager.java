@@ -1,35 +1,38 @@
 package dp.grp4.views;
 
+import dp.grp4.exceptions.ExceptionHandler;
 import dp.grp4.exceptions.ViewsManagerException;
+import dp.grp4.helpers.Helper;
 import dp.grp4.orders.OrderFirer;
 import dp.grp4.orders.OrderListener;
 import dp.grp4.orders.OrderType;
 import javafx.stage.Stage;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 public class ViewsManager implements OrderListener {
-    private static final Class<?>[] classesOfManagedViews=new Class<?>[]{
+    private static final List<Class<?>> managedViews= List.of(
             HomeView.class,
             IngredientsView.class,
             RecipesView.class,
-            ModalView.class
-    };
+            ConfirmModalView.class
+    );
     private Stage stage;
     private  Collection<InteractiveView> views;
     private ViewsManager(){}
     private static final ViewsManager instance=new ViewsManager();
-    public static ViewsManager getInstance() throws Exception {
-        if(instance.stage==null) throw new ViewsManagerException("ViewsManager is not initialized");
+    public static ViewsManager getInstance()  {
+        ExceptionHandler.context(()->{
+            if(instance.stage==null) throw new ViewsManagerException("The ViewsManager is not initialized");
+        });
         return instance;
     }
     public static void init(Stage stage){
         instance.stage = stage;
         instance.views = new HashSet<>();
-        for(Class<?> viewClass:classesOfManagedViews)
-            try {
-                viewClass.getMethod("create", ViewsManager.class).invoke(null,instance);
-            } catch (Exception ignored) {}
+        for(Class<?> viewClass:managedViews)
+            Helper.callClassMethod(viewClass,"create", instance);
     }
 
     @Override
@@ -45,10 +48,10 @@ public class ViewsManager implements OrderListener {
             case SHOW_INGREDIENTS ->IngredientsView.class;
             case SHOW_RECIPES->RecipesView.class;
             case SHOW_HOME->HomeView.class;
-            case SHOW_MODAL -> ModalView.class;
+            case SHOW_CONFIRM_MODAL-> ConfirmModalView.class;
         };
         InteractiveView view=this.views.stream().filter(v-> v.getClass()==viewClass).findFirst().orElseThrow();
-        if(view instanceof  ModalView){
+        if(view instanceof ModalView){
             ((ModalView) view).open();
             return;
         }

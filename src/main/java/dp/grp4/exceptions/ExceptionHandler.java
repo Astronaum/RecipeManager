@@ -1,22 +1,15 @@
 package dp.grp4.exceptions;
 
-import dp.grp4.orders.OrderType;
-import dp.grp4.views.ModalView;
-import dp.grp4.views.ViewsManager;
+import dp.grp4.helpers.Helper;
+import javafx.scene.control.Alert;
 
 
 public class ExceptionHandler {
     public static void handle(Exception exception){
-        System.out.println("ExceptionHandler:");
-        System.out.println("\t"+exception.getMessage());
-        try {
-            ViewsManager viewsManager = ViewsManager.getInstance();
-            ModalView modalView = (ModalView) viewsManager.getViewInstance(ModalView.class);
-            modalView.setModalText(exception.getMessage());
-            viewsManager.processOrder(OrderType.SHOW_MODAL);
-        }catch(Exception exception1){
-            ExceptionHandler.handle(exception1);
-        }
+        System.err.println("ExceptionHandler:");
+        System.err.println("\t"+exception.getClass().getName());
+        System.err.println("\t"+exception.getMessage());
+        Helper.showAlert(Alert.AlertType.ERROR,"Error",exception.getMessage());
     }
     public static void context(RunnableWithException f){
         try {
