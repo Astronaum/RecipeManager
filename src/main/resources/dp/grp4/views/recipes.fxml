@@ -1,18 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.layout.*?>
-
 <?import javafx.scene.control.Button?>
-<AnchorPane fx:id="root"
-            fx:controller="dp.grp4.views.RecipesView"
-            xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0">
-    <Text text="Recipes"
-          x="10"
-          y="20"
-          stroke="black"
-          strokeWidth="0.5"/>
-    <Button layoutX="244.0" layoutY="146.0" mnemonicParsing="false" onMouseClicked="#gotoHome" prefHeight="26.0" prefWidth="119.0" text="home" />
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ListView?>
+<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dp.grp4.views.RecipesView">
+
+    <Label layoutX="20" layoutY="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Gestion des Recettes" />
+
+    <!-- TableView pour afficher les recettes -->
+    <TableView fx:id="recipesTable" layoutX="20" layoutY="60" prefHeight="300" prefWidth="662.0">
+        <columns>
+            <TableColumn fx:id="nameColumn" text="Nom" />
+            <TableColumn fx:id="prepTimeColumn" text="Temps de préparation" />
+            <TableColumn fx:id="difficultyColumn" prefWidth="112.0" text="Difficulté" />
+            <TableColumn fx:id="categoryColumn" prefWidth="112.0" text="Catégorie" />
+            <TableColumn fx:id="actionColumn" prefWidth="275.3332824707031" text="Actions" />
+        </columns>
+    </TableView>
+
+    <!-- Formulaire pour ajouter une recette -->
+    <VBox layoutX="20" layoutY="380" prefWidth="560" spacing="10">
+        <HBox spacing="10">
+            <TextField fx:id="nameField" promptText="Nom de la recette" />
+            <TextField fx:id="prepTimeField" promptText="Temps de préparation" />
+            <ComboBox fx:id="difficultyComboBox" prefHeight="25.0" prefWidth="133.0" promptText="Difficulté" />
+            <ComboBox fx:id="categoryComboBox" prefHeight="25.0" prefWidth="139.0" promptText="Catégorie" />
+        </HBox>
+        <ListView fx:id="ingredientListView" prefHeight="100.0" prefWidth="150.0" />
+        <TextArea fx:id="instructionsTextArea" promptText="Instructions" prefHeight="100.0" />
+
+        <Button fx:id="addButton" onAction="#onAddRecipe" prefHeight="25.0" prefWidth="99.0" text="Ajouter" />
+    </VBox>
 </AnchorPane>

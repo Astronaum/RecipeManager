@@ -16,7 +16,16 @@ public class Recipe {
     private int note; // x/10
     private String comment;
     private boolean favourite;
-    public record IngredientQuantity(long id,int quantity){}
+    public record IngredientQuantity(long id, int quantity) {
+        public long getId() {
+            return id;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+    }
+
     public enum Category{
         APPETIZER, MAIN, DESSERT
     }

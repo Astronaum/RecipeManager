@@ -20,9 +20,9 @@ public class App extends Application {
         ExceptionHandler.context(()->{
             ViewsManager.init(stage);
             ViewsManager.getInstance().launch();
-            clearDB();
-            exampleAdd();
-            exampleDeleteUpdate();
+           // clearDB();
+            //exampleAdd();
+            //exampleDeleteUpdate();
         });
     }
     private void clearDB(){

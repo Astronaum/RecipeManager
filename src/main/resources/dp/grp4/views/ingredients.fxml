@@ -1,18 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+
 <AnchorPane fx:id="root"
             fx:controller="dp.grp4.views.IngredientsView"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0">
-    <Text text="IngredientsView"
-          x="10"
-          y="20"
-          stroke="black"
-          strokeWidth="0.5"/>
-    <Button layoutX="244.0" layoutY="146.0" mnemonicParsing="false" onMouseClicked="#gotoHome" prefHeight="26.0" prefWidth="119.0" text="home" />
+            prefHeight="500.0" prefWidth="600.0">
+
+    <!-- Titre -->
+    <Text text="Gestion des Ingrédients"
+          layoutX="20" layoutY="20"
+          style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <!-- Bouton Home -->
+    <Button text="Accueil"
+            layoutX="480" layoutY="20"
+            prefWidth="100" prefHeight="30"
+            onMouseClicked="#gotoHome" />
+
+    <!-- TableView pour afficher les ingrédients -->
+    <TableView fx:id="ingredientsTable" layoutX="20" layoutY="60" prefWidth="560" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="nameColumn" text="Nom" prefWidth="150" />
+            <TableColumn fx:id="stockColumn" text="Quantité" prefWidth="100" />
+            <TableColumn fx:id="unitColumn" text="Unité" prefWidth="100" />
+            <TableColumn fx:id="expirationColumn" text="Expiration" prefWidth="110" />
+            <TableColumn fx:id="actionColumn" text="Actions" prefWidth="100" />
+        </columns>
+    </TableView>
+
+    <!-- Formulaire d'ajout -->
+    <VBox layoutX="20" layoutY="380" spacing="10" prefWidth="560">
+        <!-- Ligne pour Nom, Quantité et Unité -->
+        <HBox spacing="10">
+            <TextField fx:id="nameField" promptText="Nom" prefWidth="150" />
+            <TextField fx:id="stockField" promptText="Quantité" prefWidth="100" />
+            <ComboBox fx:id="unitComboBox" promptText="Unité" prefWidth="100" />
+        </HBox>
+
+        <!-- Ligne pour Date d'expiration et bouton Ajouter -->
+        <HBox spacing="10">
+            <DatePicker fx:id="expirationDatePicker" promptText="Date d'expiration" prefWidth="150" />
+            <Button fx:id="addOrSaveButton" text="Ajouter" onAction="#onAddIngredient" prefWidth="100" />        </HBox>
+    </VBox>
+
 </AnchorPane>

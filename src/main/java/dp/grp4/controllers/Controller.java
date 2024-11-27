@@ -1,5 +1,6 @@
 package dp.grp4.controllers;
 
+import dp.grp4.exceptions.ViewsManagerException;
 import dp.grp4.orders.OrderFirer;
 import dp.grp4.orders.OrderListener;
 import dp.grp4.orders.OrderType;
@@ -26,6 +27,12 @@ public abstract class Controller implements OrderFirer {
 
     @Override
     public void fireOrder(OrderType orderType) {
-        orderListeners.get(orderType).forEach(e1 -> e1.processOrder(orderType));
+        orderListeners.get(orderType).forEach(e1 -> {
+            try {
+                e1.processOrder(orderType);
+            } catch (ViewsManagerException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
