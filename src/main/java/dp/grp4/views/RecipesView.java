@@ -1,20 +1,24 @@
 package dp.grp4.views;
 
 import dp.grp4.controllers.RecipesController;
-import dp.grp4.models.dao.IngredientDAO;
+import dp.grp4.exceptions.DBException;
+import dp.grp4.helpers.Helper;
 import dp.grp4.models.dao.RecipeDAO;
 import dp.grp4.models.entities.Ingredient;
 import dp.grp4.models.entities.Recipe;
+import dp.grp4.orders.OrderType;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import javafx.collections.ObservableList;
 
 public class RecipesView extends InteractiveView {
 
@@ -23,42 +27,49 @@ public class RecipesView extends InteractiveView {
 
     @FXML
     private TableColumn<Recipe, String> nameColumn;
-
+    @FXML
+    private TableColumn<Recipe, String> idColumn;
     @FXML
     private TableColumn<Recipe, Integer> prepTimeColumn;
 
     @FXML
-    private TableColumn<Recipe, String> difficultyColumn;
+    private TableColumn<Recipe, Recipe.Difficulty> difficultyColumn;
 
     @FXML
-    private TableColumn<Recipe, String> categoryColumn;
+    private TableColumn<Recipe, Recipe.Category> categoryColumn;
 
     @FXML
-    private TableColumn<Recipe, Void> actionColumn;
+    private TableColumn<Recipe, Void> favoriteColumn;
 
     @FXML
-    private TextField nameField;
+    private TableColumn<Recipe, Void> actionsColumn;
 
     @FXML
-    private TextField prepTimeField;
+    private TextField searchNameField;
 
     @FXML
-    private ComboBox<Recipe.Difficulty> difficultyComboBox;
+    private CheckBox favoritesCheckBox;
 
     @FXML
     private ComboBox<Recipe.Category> categoryComboBox;
 
     @FXML
-    private ListView<Ingredient> ingredientListView;  // ListView for ingredients
+    private ComboBox<Recipe.Difficulty> difficultyComboBox;
 
     @FXML
-    private TextArea instructionsTextArea;
+    private TextField maxPrepTimeField;
 
     @FXML
-    private Button addButton;
+    private RadioButton andRadioButton;
+
+    @FXML
+    private RadioButton orRadioButton;
+
+    @FXML
+    private ToggleGroup logicToggleGroup;
 
     private final RecipeDAO recipeDAO = RecipeDAO.getInstance();
-    private final IngredientDAO ingredientDAO = IngredientDAO.getInstance(); // DAO to manage ingredients
+    private final ObservableList<Recipe> recipesList = FXCollections.observableArrayList();
 
     public static RecipesView create(ViewsManager viewsManager) throws IOException {
         RecipesController recipesController = RecipesController.create(viewsManager);
@@ -67,61 +78,36 @@ public class RecipesView extends InteractiveView {
         return recipesView;
     }
 
-    public RecipesController getController() {
-        return (RecipesController) super.getController();
-    }
-
     @FXML
     private void initialize() {
-        System.out.println("Initializing RecipesView...");
+        recipesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        categoryComboBox.setItems(FXCollections.observableArrayList(Recipe.Category.values()));
+        difficultyComboBox.setItems(FXCollections.observableArrayList(Recipe.Difficulty.values()));
 
-        // Configure table columns with properties
-        nameColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
-        prepTimeColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getPreparationTime()).asObject());
-        difficultyColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getDifficulty().toString()));
-        categoryColumn.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCategory().toString()));
+        logicToggleGroup = new ToggleGroup();
+        andRadioButton.setToggleGroup(logicToggleGroup);
+        orRadioButton.setToggleGroup(logicToggleGroup);
 
-        // Add action buttons (modify, delete, view details)
-        addActionButtons();
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        prepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
+        difficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
 
-        // Initialize comboBoxes for difficulty and category
-        difficultyComboBox.getItems().setAll(Recipe.Difficulty.values());
-        categoryComboBox.getItems().setAll(Recipe.Category.values());
-
-        // Initialize ListView for ingredients
-        ingredientListView.setItems(FXCollections.observableArrayList(ingredientDAO.getAll()));
-
-        // Set the ListView to display ingredient names
-        ingredientListView.setCellFactory(param -> new ListCell<Ingredient>() {
-            @Override
-            protected void updateItem(Ingredient item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getName());  // Display the ingredient's name
-                }
-            }
-        });
-
-        ingredientListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); // Allow multiple selections
-
-        // Refresh the recipe table
-        refreshRecipesTable();
-    }
-
-
-    private void addActionButtons() {
-        // Create "cell factory" for action column (modify, delete, view details buttons)
-        actionColumn.setCellFactory(param -> new TableCell<Recipe, Void>() {
-            private final Button modifyButton = new Button("Modifier");
-            private final Button deleteButton = new Button("Supprimer");
-            private final Button viewDetailsButton = new Button("Voir les détails");
+        favoriteColumn.setCellFactory(column -> new TableCell<>() {
+            private final Button favoriteButton = new Button("☆");
 
             {
-                modifyButton.setOnAction(event -> onModifyRecipe(getTableRow().getItem()));
-                deleteButton.setOnAction(event -> onDeleteRecipe(getTableRow().getItem()));
-                viewDetailsButton.setOnAction(event -> onViewDetails(getTableRow().getItem()));
+                favoriteButton.setOnAction(event -> {
+                    Recipe recipe = getTableView().getItems().get(getIndex());
+                    recipe.setFavourite(!recipe.isFavourite());
+                    try {
+                        RecipeDAO.getInstance().update(recipe);
+                    } catch (DBException e) {
+                        throw new RuntimeException(e);
+                    }
+                    updateFavoriteButton(recipe);
+                });
             }
 
             @Override
@@ -130,188 +116,148 @@ public class RecipesView extends InteractiveView {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    HBox hbox = new HBox(modifyButton, deleteButton, viewDetailsButton);
-                    setGraphic(hbox);
+                    Recipe recipe = getTableView().getItems().get(getIndex());
+                    updateFavoriteButton(recipe);
+                    setGraphic(favoriteButton);
+                }
+            }
+
+            private void updateFavoriteButton(Recipe recipe) {
+                favoriteButton.setText(recipe.isFavourite() ? "★" : "☆");
+                if (favoritesCheckBox.isSelected()) {
+                    refreshRecipesTable();
                 }
             }
         });
-    }
 
-    @FXML
-    private void onViewDetails(Recipe recipe) {
-        if (recipe != null) {
-            StringBuilder details = new StringBuilder();
-            details.append("Nom: ").append(recipe.getName()).append("\n");
-            details.append("Temps de préparation: ").append(recipe.getPreparationTime()).append(" minutes\n");
-            details.append("Difficulté: ").append(recipe.getDifficulty()).append("\n");
-            details.append("Catégorie: ").append(recipe.getCategory()).append("\n");
-            details.append("\nIngrédients:\n");
+        actionsColumn.setCellFactory(column -> new TableCell<>() {
+            private final Button editButton = new Button("✎");
+            private final Button deleteButton = new Button("🗑");
+            private final Button detailsButton = new Button("📝");
+            private final HBox actionButtons = new HBox(editButton, deleteButton, detailsButton);
 
-            // Check if ingredient list is null and replace it with an empty list if necessary
-            if (recipe.getIngredients() != null) {
-                for (Recipe.IngredientQuantity ingredient : recipe.getIngredients()) {
-                    details.append("- ").append(ingredient.getQuantity()).append(" of ").append(ingredient.getId()).append("\n");
+            {
+                editButton.setOnAction(event -> {
+                    Recipe recipe = getTableView().getItems().get(getIndex());
+
+                    RecipeModalView modalView = Helper.getViewInstance(RecipeModalView.class);
+                    modalView.setRecipeToEdit(recipe);
+                    modalView.open();
+                    refreshRecipesTable();
+                });
+
+                deleteButton.setOnAction(event -> {
+                    Recipe recipe = getTableView().getItems().get(getIndex());
+
+                    ConfirmModalView modalView = Helper.getViewInstance(ConfirmModalView.class);
+                    modalView.setModalText("Êtes-vous sûr de vouloir supprimer la recette avec ID = "
+                            + recipe.getId() + " : " + recipe.getName() + " ?");
+
+                    modalView.setOnConfirmAction(() -> {
+                        recipeDAO.delete(recipe.getId());
+                        refreshRecipesTable();
+                        Helper.showAlert(Alert.AlertType.INFORMATION, "Succès",
+                                "La recette a été supprimée avec succès.");
+                    });
+
+                    modalView.open();
+                });
+
+                detailsButton.setOnAction(event -> {
+                    Recipe recipe = getTableView().getItems().get(getIndex());
+                    RecipeDetailsModalView modalView = Helper.getViewInstance(RecipeDetailsModalView.class);
+                    if (modalView == null) {
+                        Helper.showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la vue des détails de la recette.");
+                        return;
+                    }
+                    modalView.setRecipe(recipe);
+                    modalView.open();
+
+                });
+
+
+                actionButtons.setSpacing(5);
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(actionButtons);
                 }
-            } else {
-                details.append("Aucun ingrédient disponible.\n");
             }
+        });
 
-            details.append("\nInstructions:\n");
-            if (recipe.getInstructionsList() != null) {
-                for (String instruction : recipe.getInstructionsList()) {
-                    details.append("- ").append(instruction).append("\n");
-                }
-            } else {
-                details.append("Aucune instruction disponible.\n");
-            }
-
-            // Show details in an alert or modal
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Détails de la recette");
-            alert.setHeaderText(recipe.getName());
-            alert.setContentText(details.toString());
-            alert.showAndWait();
-        }
-    }
-
-    @FXML
-    private void onDeleteRecipe(Recipe recipe) {
-        if (recipe != null) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation de suppression");
-            alert.setHeaderText("Êtes-vous sûr de vouloir supprimer cette recette ?");
-            alert.setContentText("Cette action est irréversible.");
-
-
-        }
-    }
-
-    @FXML
-    private void onModifyRecipe(Recipe recipe) {
-        if (recipe != null) {
-            // Fill form fields with existing values
-            nameField.setText(recipe.getName());
-            prepTimeField.setText(String.valueOf(recipe.getPreparationTime()));
-            difficultyComboBox.setValue(recipe.getDifficulty());
-            categoryComboBox.setValue(recipe.getCategory());
-            instructionsTextArea.setText(String.join("\n", recipe.getInstructionsList()));
-
-            // Change the "Add" button to "Save"
-            addButton.setText("Enregistrer");
-            addButton.setOnAction(event -> saveModifiedRecipe(recipe)); // Link to save modified recipe
-        }
-    }
-
-    @FXML
-    private void saveModifiedRecipe(Recipe recipe) {
-        try {
-            String name = nameField.getText();
-            int prepTime = Integer.parseInt(prepTimeField.getText());
-            Recipe.Difficulty difficulty = difficultyComboBox.getValue();
-            Recipe.Category category = categoryComboBox.getValue();
-            String instructions = instructionsTextArea.getText();
-
-            if (name.isEmpty() || difficulty == null || category == null) {
-                System.out.println("Veuillez remplir tous les champs !");
-                return;
-            }
-
-            // Update recipe properties
-            recipe.setName(name);
-            recipe.setPreparationTime(prepTime);
-            recipe.setDifficulty(difficulty);
-            recipe.setCategory(category); // Update category
-            recipe.setInstructionsList(FXCollections.observableArrayList(instructions.split("\n")));
-
-            // Update recipe in DAO
-            recipeDAO.update(recipe);
-
-            // Find the index of the modified recipe in the table
-            int index = recipesTable.getItems().indexOf(recipe);
-
-            // Update the modified row in the table
-            if (index != -1) {
-                recipesTable.getItems().set(index, recipe);  // Update the item at the given index
-            }
-
-            // Reset the form and restore the "Add" button
-            nameField.clear();
-            prepTimeField.clear();
-            difficultyComboBox.setValue(null);
-            categoryComboBox.setValue(null);
-            instructionsTextArea.clear();
-
-            addButton.setText("Ajouter");
-            addButton.setOnAction(event -> onAddRecipe());  // Restore the "Add" action
-
-            System.out.println("Recette modifiée : " + recipe.getName());
-        } catch (NumberFormatException e) {
-            System.out.println("Erreur : Le temps de préparation doit être un nombre !");
-        } catch (Exception e) {
-            System.out.println("Erreur lors de la modification de la recette : " + e.getMessage());
-        }
+        refreshRecipesTable();
+        recipesTable.refresh();
     }
 
     @FXML
     private void onAddRecipe() {
-        try {
-            // Retrieve form values
-            String name = nameField.getText();
-            int prepTime = Integer.parseInt(prepTimeField.getText());
-            Recipe.Difficulty difficulty = difficultyComboBox.getValue();
-            Recipe.Category category = categoryComboBox.getValue();
-            String instructions = instructionsTextArea.getText();
-
-            if (name.isEmpty() || difficulty == null || category == null) {
-                System.out.println("Please fill in all the fields!");
-                return;
-            }
-
-            // Retrieve selected ingredients from ListView
-            ObservableList<Ingredient> selectedIngredients = ingredientListView.getSelectionModel().getSelectedItems();
-
-            // Create a new Recipe object and add ingredients
-            Recipe recipe = new Recipe();
-            recipe.setName(name);
-            recipe.setPreparationTime(prepTime);
-            recipe.setDifficulty(difficulty);
-            recipe.setCategory(category);
-            recipe.setInstructionsList(FXCollections.observableArrayList(instructions.split("\n")));
-
-            // Create a list of IngredientQuantities for the selected ingredients
-            List<Recipe.IngredientQuantity> ingredientQuantities = new ArrayList<>();
-            for (Ingredient ingredient : selectedIngredients) {
-                ingredientQuantities.add(new Recipe.IngredientQuantity(ingredient.getId(), 1)); // Assuming quantity is 1 for now
-            }
-            recipe.setIngredients(ingredientQuantities);
-
-            // Add the recipe to the DAO
-            recipeDAO.add(recipe);
-
-            // Refresh the recipe table
-            refreshRecipesTable();
-
-            // Reset the form fields
-            nameField.clear();
-            prepTimeField.clear();
-            difficultyComboBox.setValue(null);
-            categoryComboBox.setValue(null);
-            instructionsTextArea.clear();
-            ingredientListView.getSelectionModel().clearSelection();  // Clear selected ingredients
-
-            System.out.println("Recipe added: " + recipe.getName());
-        } catch (NumberFormatException e) {
-            System.out.println("Error: Preparation time must be a number!");
-        } catch (Exception e) {
-            System.out.println("Error when adding recipe: " + e.getMessage());
-        }
+        RecipeModalView modalView = Helper.getViewInstance(RecipeModalView.class);
+        modalView.setRecipeToEdit(null);
+        modalView.open();
+        refreshRecipesTable();
     }
+
+
+    @FXML
+    private void onSearchRecipes() {
+        String name = searchNameField.getText().trim();
+        Recipe.Category category = categoryComboBox.getValue();
+        Recipe.Difficulty difficulty = difficultyComboBox.getValue();
+        boolean favoriteOnly = favoritesCheckBox.isSelected();
+        Integer maxPrepTime = null;
+
+        if (!maxPrepTimeField.getText().isEmpty()) {
+            try {
+                maxPrepTime = Integer.parseInt(maxPrepTimeField.getText().trim());
+            } catch (NumberFormatException e) {
+                maxPrepTime = null;
+            }
+        }
+
+        recipesList.clear();
+        boolean useAndLogic = andRadioButton.isSelected();
+        List<Recipe> filteredRecipes = recipeDAO.filter(
+                name.isEmpty() ? null : name,
+                category,
+                difficulty,
+                favoriteOnly ? Boolean.TRUE : null,
+                maxPrepTime,
+                useAndLogic
+        );
+
+        recipesList.setAll(filteredRecipes);
+        recipesTable.setItems(recipesList);
+    }
+
 
     private void refreshRecipesTable() {
-        recipesTable.setItems(FXCollections.observableArrayList(recipeDAO.getAll()));
+        List<Recipe> recipes = recipeDAO.getAll();
+        recipesList.setAll(recipes);
+        recipesTable.setItems(recipesList);
     }
 
-    public void gotoHome(MouseEvent e) {
+    public RecipesController getController() {
+        return (RecipesController) super.getController();
+    }
+
+    @FXML
+    private void onViewFeasibleRecipes() {
+        this.getController().onViewFeasibleRecipes();
+    }
+
+    @FXML
+    private void onShowFavorites() {
+        this.getController().onShowFavorites();
+    }
+
+    public void goHome(ActionEvent e) {
         this.getController().gotoHome();
     }
+
+
 }

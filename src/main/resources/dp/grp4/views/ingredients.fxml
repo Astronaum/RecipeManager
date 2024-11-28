@@ -1,57 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root"
-            fx:controller="dp.grp4.views.IngredientsView"
-            xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="500.0" prefWidth="600.0">
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="800.0" stylesheets="@styles/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dp.grp4.views.IngredientsView">
 
-    <!-- Titre -->
-    <Text text="Gestion des Ingrédients"
-          layoutX="20" layoutY="20"
-          style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <!-- Title -->
+    <Text styleClass="title-label" text="Gestion des Ingrédients" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
 
-    <!-- Bouton Home -->
-    <Button text="Accueil"
-            layoutX="480" layoutY="20"
-            prefWidth="100" prefHeight="30"
-            onMouseClicked="#gotoHome" />
-
-    <!-- TableView pour afficher les ingrédients -->
-    <TableView fx:id="ingredientsTable" layoutX="20" layoutY="60" prefWidth="560" prefHeight="300">
+    <!-- TableView to display ingredients -->
+    <TableView fx:id="ingredientsTable" layoutX="20.0" layoutY="108.0" styleClass="ingredients-table" AnchorPane.bottomAnchor="62.66666666666674" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="108.0">
         <columns>
-            <TableColumn fx:id="nameColumn" text="Nom" prefWidth="150" />
-            <TableColumn fx:id="stockColumn" text="Quantité" prefWidth="100" />
-            <TableColumn fx:id="unitColumn" text="Unité" prefWidth="100" />
-            <TableColumn fx:id="expirationColumn" text="Expiration" prefWidth="110" />
-            <TableColumn fx:id="actionColumn" text="Actions" prefWidth="100" />
+            <TableColumn fx:id="idColumn" text="ID" />
+            <TableColumn fx:id="nameColumn" text="Nom" />
+            <TableColumn fx:id="stockColumn" text="Stock" />
+            <TableColumn fx:id="unitColumn" text="Unité" />
+            <TableColumn fx:id="expirationColumn" text="Expiration" />
+            <TableColumn fx:id="actionColumn" text="Actions" />
         </columns>
     </TableView>
 
-    <!-- Formulaire d'ajout -->
-    <VBox layoutX="20" layoutY="380" spacing="10" prefWidth="560">
-        <!-- Ligne pour Nom, Quantité et Unité -->
-        <HBox spacing="10">
-            <TextField fx:id="nameField" promptText="Nom" prefWidth="150" />
-            <TextField fx:id="stockField" promptText="Quantité" prefWidth="100" />
-            <ComboBox fx:id="unitComboBox" promptText="Unité" prefWidth="100" />
-        </HBox>
-
-        <!-- Ligne pour Date d'expiration et bouton Ajouter -->
-        <HBox spacing="10">
-            <DatePicker fx:id="expirationDatePicker" promptText="Date d'expiration" prefWidth="150" />
-            <Button fx:id="addOrSaveButton" text="Ajouter" onAction="#onAddIngredient" prefWidth="100" />        </HBox>
-    </VBox>
+    <!-- Button to add a new ingredient -->
+    <Button fx:id="addButton" layoutX="20.0" layoutY="552.0" onAction="#onAddIngredient" prefHeight="16.0" prefWidth="35.0" styleClass="action-button" text="+" AnchorPane.bottomAnchor="14.666666666666629" AnchorPane.leftAnchor="20.0" />
+    <Button fx:id="homeButton" layoutX="680.0" layoutY="14.0" onAction="#gotoHome" prefWidth="100" styleClass="action-button" text="Home" AnchorPane.bottomAnchor="552.6666666666666" AnchorPane.rightAnchor="20.0" />
+    <Button fx:id="viewRecipeButton" layoutX="547.0" layoutY="14.0" onAction="#gotoRecipes" styleClass="action-button" text="Voir les recettes" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="14.0" />
 
 </AnchorPane>

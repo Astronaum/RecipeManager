@@ -83,4 +83,9 @@ public class Ingredient {
             return new Ingredient(this);
         }
     }
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

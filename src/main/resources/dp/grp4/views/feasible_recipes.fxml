@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="800.0" stylesheets="@styles/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dp.grp4.views.FeasibleRecipesView">
+
+    <!-- Title Label -->
+    <Label styleClass="title-label" text="Recettes Faisables et Incomplètes" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+    <Button fx:id="viewRecipeButton" onAction="#gotoRecipes" styleClass="action-button" text="Retour" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+    <Button fx:id="showHomeButton" onAction="#goHome" styleClass="action-button" text="Accueil" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="20.0" />
+
+    <!-- Tab Pane to Switch Between Feasible and Incomplete Recipes -->
+    <TabPane layoutY="67.33333333333333" prefHeight="513.0" prefWidth="760.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="67.0">
+        <tabs>
+            <!-- Feasible Recipes Tab -->
+            <Tab text="Recettes Faisables">
+                <AnchorPane>
+                    <TableView fx:id="feasibleRecipesTable" layoutY="14.0" styleClass="recipes-table" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+                        <columns>
+                            <TableColumn fx:id="feasibleNameColumn" text="Nom" />
+                            <TableColumn fx:id="feasiblePrepTimeColumn" text="Temps de Préparation" />
+                            <TableColumn fx:id="feasibleDifficultyColumn" text="Difficulté" />
+                            <TableColumn fx:id="feasibleCategoryColumn" text="Catégorie" />
+                        </columns>
+                    </TableView>
+                </AnchorPane>
+            </Tab>
+
+            <!-- Incomplete Recipes Tab -->
+            <Tab text="Recettes Incomplètes">
+                <AnchorPane>
+                    <TableView fx:id="incompleteRecipesTable" layoutY="14.0" styleClass="recipes-table" AnchorPane.bottomAnchor="-14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+                        <columns>
+                            <TableColumn fx:id="incompleteNameColumn" text="Nom" />
+                            <TableColumn fx:id="incompletePrepTimeColumn" text="Temps de Préparation" />
+                            <TableColumn fx:id="incompleteDifficultyColumn" text="Difficulté" />
+                            <TableColumn fx:id="incompleteCategoryColumn" text="Catégorie" />
+                            <TableColumn fx:id="incompleteMissingIngredientsColumn" text="Ingrédients Manquants" />
+                        </columns>
+                    </TableView>
+                </AnchorPane>
+            </Tab>
+        </tabs>
+    </TabPane>
+</AnchorPane>

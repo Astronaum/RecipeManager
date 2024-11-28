@@ -1,43 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ListView?>
-<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dp.grp4.views.RecipesView">
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="800.0" stylesheets="@styles/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dp.grp4.views.RecipesView">
+    <!-- Title Label -->
+    <Label layoutX="20" layoutY="20" styleClass="title-label" text="Gestion des Recettes" />
+    <Button fx:id="viewFeasibleButton" layoutY="20.0" onAction="#onViewFeasibleRecipes" styleClass="action-button" text="Voir Recettes Faisables" AnchorPane.rightAnchor="20.0" />
+    <Button fx:id="showFavoritesButton" layoutX="467.0" layoutY="20.0" onAction="#onShowFavorites" styleClass="action-button" text="Voir Recettes Favoris" AnchorPane.rightAnchor="187.0" />
 
-    <Label layoutX="20" layoutY="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Gestion des Recettes" />
+    <!-- Search Section -->
+    <HBox layoutY="70.0" spacing="10" styleClass="search-section" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+        <TextField fx:id="searchNameField" promptText="Nom de la recette" styleClass="search-field" HBox.hgrow="ALWAYS" />
+        <CheckBox fx:id="favoritesCheckBox" styleClass="search-checkbox" text="Favoris seulement" HBox.hgrow="NEVER" />
+        <ComboBox fx:id="categoryComboBox" promptText="Catégorie" styleClass="search-combobox" HBox.hgrow="ALWAYS" />
+        <ComboBox fx:id="difficultyComboBox" promptText="Difficulté" styleClass="search-combobox" HBox.hgrow="ALWAYS" />
+        <TextField fx:id="maxPrepTimeField" promptText="Temps max (min)" styleClass="search-field" HBox.hgrow="ALWAYS" />
+        <RadioButton fx:id="orRadioButton" selected="true" styleClass="search-radio" text="OR" HBox.hgrow="NEVER">
+            <toggleGroup>
+                <ToggleGroup fx:id="logicToggleGroup" />
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="andRadioButton" styleClass="search-radio" text="AND" toggleGroup="$logicToggleGroup" HBox.hgrow="NEVER" />
+        <Button onAction="#onSearchRecipes" styleClass="search-button" text="Rechercher" HBox.hgrow="NEVER" />
+        <Button fx:id="addRecipeButton" onAction="#onAddRecipe" styleClass="action-button" text="+" HBox.hgrow="NEVER" />
 
-    <!-- TableView pour afficher les recettes -->
-    <TableView fx:id="recipesTable" layoutX="20" layoutY="60" prefHeight="300" prefWidth="662.0">
+    </HBox>
+
+    <!-- Table to display recipes -->
+    <TableView fx:id="recipesTable" layoutX="20.0" layoutY="150.0" styleClass="recipes-table" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="150.0">
         <columns>
+            <TableColumn fx:id="idColumn" text="ID" />
             <TableColumn fx:id="nameColumn" text="Nom" />
-            <TableColumn fx:id="prepTimeColumn" text="Temps de préparation" />
-            <TableColumn fx:id="difficultyColumn" prefWidth="112.0" text="Difficulté" />
-            <TableColumn fx:id="categoryColumn" prefWidth="112.0" text="Catégorie" />
-            <TableColumn fx:id="actionColumn" prefWidth="275.3332824707031" text="Actions" />
+            <TableColumn fx:id="prepTimeColumn" text="Temps de Préparation" />
+            <TableColumn fx:id="difficultyColumn" text="Difficulté" />
+            <TableColumn fx:id="categoryColumn" text="Catégorie" />
+            <TableColumn fx:id="favoriteColumn" text="Favoris" />
+            <TableColumn fx:id="actionsColumn" text="Actions" />
         </columns>
     </TableView>
+     <Button fx:id="showHomeButton" layoutX="380.0" layoutY="20.0" onAction="#goHome" styleClass="action-button" text="Accueil" AnchorPane.rightAnchor="351.3333333333333" AnchorPane.topAnchor="20.0" />
 
-    <!-- Formulaire pour ajouter une recette -->
-    <VBox layoutX="20" layoutY="380" prefWidth="560" spacing="10">
-        <HBox spacing="10">
-            <TextField fx:id="nameField" promptText="Nom de la recette" />
-            <TextField fx:id="prepTimeField" promptText="Temps de préparation" />
-            <ComboBox fx:id="difficultyComboBox" prefHeight="25.0" prefWidth="133.0" promptText="Difficulté" />
-            <ComboBox fx:id="categoryComboBox" prefHeight="25.0" prefWidth="139.0" promptText="Catégorie" />
-        </HBox>
-        <ListView fx:id="ingredientListView" prefHeight="100.0" prefWidth="150.0" />
-        <TextArea fx:id="instructionsTextArea" promptText="Instructions" prefHeight="100.0" />
-
-        <Button fx:id="addButton" onAction="#onAddRecipe" prefHeight="25.0" prefWidth="99.0" text="Ajouter" />
-    </VBox>
 </AnchorPane>

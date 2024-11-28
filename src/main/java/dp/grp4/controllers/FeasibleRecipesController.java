@@ -3,13 +3,15 @@ package dp.grp4.controllers;
 import dp.grp4.orders.OrderType;
 import dp.grp4.views.ViewsManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
-public class IngredientsController extends Controller{
-    private IngredientsController(){}
+public class FeasibleRecipesController extends Controller  {
+    private FeasibleRecipesController(){}
 
-    public static IngredientsController create(ViewsManager viewsManager) {
-        IngredientsController controller=new IngredientsController();
+    public static FeasibleRecipesController create(ViewsManager viewsManager) {
+        FeasibleRecipesController controller=new FeasibleRecipesController();
         controller.setOrderListeners(new HashMap<>());
         Arrays.stream(OrderType.values()).forEach(
                 t -> controller.getOrderListeners().put(t, new ArrayList<>())
@@ -17,11 +19,11 @@ public class IngredientsController extends Controller{
         viewsManager.setSubscription(controller);
         return controller;
     }
-    public void gotoHome(){
-        this.fireOrder(OrderType.SHOW_HOME);
-    }
     public void gotoRecipes(){
         this.fireOrder(OrderType.SHOW_RECIPES);
+    }
+    public void gotoHome(){
+        this.fireOrder(OrderType.SHOW_HOME);
     }
 
 }

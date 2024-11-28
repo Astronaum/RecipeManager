@@ -1,5 +1,6 @@
 package dp.grp4.models.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -87,9 +88,11 @@ public class Recipe {
     public List<String> getInstructionsList() {
         return instructionsList;
     }
+
     public void setInstructionsList(List<String> instructionsList) {
-        this.instructionsList = instructionsList;
+        this.instructionsList = (instructionsList != null) ? instructionsList : new ArrayList<>();
     }
+
     public int getNote() {
         return note;
     }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="root"
+      fx:controller="dp.grp4.views.IngredientModalView"
+      alignment="TOP_LEFT"
+      spacing="10"
+      stylesheets="@styles/modals.css"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <Label fx:id="modalTitle" text="Titre du Modal" styleClass="modal-title" />
+    <TextField fx:id="nameField" promptText="Nom de l'ingrédient" styleClass="input-field" />
+    <TextField fx:id="stockField" promptText="Stock" styleClass="input-field" />
+    <ComboBox fx:id="unitComboBox" promptText="Unité" styleClass="input-field" />
+    <DatePicker fx:id="expirationDatePicker" promptText="Date d'expiration" styleClass="input-field" />
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Annuler" onAction="#closeModal" styleClass="cancel-button" />
+        <Button text="Confirmer" onAction="#onConfirm" styleClass="confirm-button" />
+    </HBox>
+</VBox>

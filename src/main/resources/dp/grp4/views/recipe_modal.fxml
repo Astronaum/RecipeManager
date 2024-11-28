@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="root" alignment="TOP_LEFT" spacing="10" stylesheets="@styles/modals.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dp.grp4.views.RecipeModalView">
+
+    <Label fx:id="modalTitle" styleClass="modal-title" text="Ajouter / Modifier une Recette" />
+
+    <HBox spacing="10">
+        <Label styleClass="input-label" text="Nom :" />
+        <TextField fx:id="nameField" promptText="Entrez le nom de la recette" styleClass="input-field" />
+        <Label styleClass="input-label" text="Temps de Préparation (min) :" />
+        <TextField fx:id="prepTimeField" promptText="Temps en minutes" styleClass="input-field" />
+    </HBox>
+
+    <HBox spacing="10" />
+
+    <HBox spacing="10">
+        <Label styleClass="input-label" text="Difficulté :" />
+        <ComboBox fx:id="difficultyComboBox" prefHeight="52.0" prefWidth="149.0" promptText="Sélectionner" styleClass="input-field" />
+        <Label styleClass="input-label" text="Catégorie :" />
+        <ComboBox fx:id="categoryComboBox" promptText="Sélectionner" styleClass="input-field" />
+    </HBox>
+
+    <HBox spacing="10" />
+
+    <VBox prefHeight="249.0" prefWidth="479.0" spacing="10">
+        <Label styleClass="modal-subtitle" text="Ingrédients :" />
+        <TableView fx:id="ingredientTable" prefHeight="150" styleClass="table-view">
+            <columns>
+                <TableColumn fx:id="ingredientNameColumn" prefWidth="80.66668629646301" text="Nom" />
+                <TableColumn fx:id="ingredientQuantityColumn" prefWidth="79.33331298828125" text="Quantité" />
+                <TableColumn fx:id="ingredientUnitColumn" text="Unité" />
+                <TableColumn fx:id="ingredientActionColumn" text="Actions" />
+            </columns>
+        </TableView>
+
+        <HBox spacing="10">
+            <ComboBox fx:id="ingredientComboBox" prefHeight="26.0" prefWidth="202.0" promptText="Choisir un ingrédient" styleClass="input-field" />
+            <TextField fx:id="ingredientQuantityField" promptText="Quantité" styleClass="input-field" />
+            <Button onAction="#onAddIngredientToList" prefHeight="17.0" prefWidth="25.0" styleClass="add-button" text="+" />
+        </HBox>
+
+        <Button onAction="#onAddNewIngredient" styleClass="add-button" text="Ajouter un nouvel ingrédient" />
+    </VBox>
+     <Label styleClass="modal-subtitle" text="Instructions :" />
+     <TextArea fx:id="instructionsField" prefHeight="122.0" prefWidth="479.0" styleClass="text-area" wrapText="true" />
+
+    <VBox spacing="10" />
+
+    <HBox alignment="CENTER" spacing="10">
+        <Button onAction="#onConfirm" styleClass="confirm-button" text="Confirmer" />
+        <Button onAction="#closeModal" styleClass="cancel-button" text="Annuler" />
+    </HBox>
+</VBox>

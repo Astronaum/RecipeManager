@@ -1,0 +1,32 @@
+.bg-color{
+    -fx-background-color: #ccffcc;
+}
+.whiteee{
+    -fx-background-color: #e6ffe6;
+}
+.shining-color{
+    -fx-background-color: #00ff00;
+}
+.dark-color{
+    -fx-background-color: #00cc00;
+}
+.gray-color{
+    -fx-background-color: #c0c0c0;
+}
+.home-button {
+    -fx-background-color: #00cc00;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 4);
+    -fx-background-insets: 0;
+    -fx-overflow-shape: none;
+    -fx-cursor: hand;
+}
+.home-button:hover {
+    -fx-background-color:#00ff00;
+}
+.home-button-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+}
+﻿

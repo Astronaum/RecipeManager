@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="root"
+      fx:controller="dp.grp4.views.RecipeDetailsModalView"
+      alignment="TOP_LEFT"
+      spacing="10"
+      stylesheets="@styles/modals.css"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1">
+
+    <Label fx:id="recipeNameLabel" text="Détails de la recette" styleClass="modal-title" />
+
+    <VBox spacing="5">
+        <Label text="Ingrédients :" styleClass="modal-subtitle" />
+        <ListView fx:id="ingredientsListView" styleClass="list-view" prefHeight="150" />
+    </VBox>
+
+    <VBox spacing="5">
+        <Label text="Instructions :" styleClass="modal-subtitle" />
+        <TextArea fx:id="instructionsTextArea" wrapText="true" editable="false" styleClass="text-area" prefHeight="150" />
+    </VBox>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Fermer" onAction="#closeModal" styleClass="close-button" />
+    </HBox>
+</VBox>
