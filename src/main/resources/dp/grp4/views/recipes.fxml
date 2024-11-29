@@ -42,9 +42,11 @@
         <columns>
             <TableColumn fx:id="idColumn" editable="false" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" text="ID" />
             <TableColumn fx:id="nameColumn" editable="false" sortable="false" text="Name" />
+            <TableColumn fx:id="noteColumn" editable="false" sortable="false" text="Note" />
             <TableColumn fx:id="prepTimeColumn" editable="false" sortable="false" text="Preparation Time (min)" />
             <TableColumn fx:id="difficultyColumn" editable="false" sortable="false" text="Difficulty" />
             <TableColumn fx:id="categoryColumn" editable="false" sortable="false" text="Category" />
+            <TableColumn fx:id="commentColumn" editable="false" sortable="false" text="Comment" />
             <TableColumn fx:id="favoriteColumn" editable="false" sortable="false" text="Favourite" />
             <TableColumn fx:id="actionsColumn" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" sortable="false" text="Actions" />
         </columns>

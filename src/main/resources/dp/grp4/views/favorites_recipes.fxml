@@ -16,8 +16,11 @@
         <columns>
             <TableColumn fx:id="nameColumn" text="Name" />
             <TableColumn fx:id="prepTimeColumn" text="Preparation Time (min)" />
+            <TableColumn fx:id="noteColumn" editable="false" sortable="false" text="Note" />
             <TableColumn fx:id="difficultyColumn" text="Difficulty" />
             <TableColumn fx:id="categoryColumn" text="Category" />
+            <TableColumn fx:id="commentColumn" editable="false" sortable="false" text="Comment" />
+
         </columns>
     </TableView>
 </AnchorPane>

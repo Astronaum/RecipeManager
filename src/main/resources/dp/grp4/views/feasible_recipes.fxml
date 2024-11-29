@@ -25,8 +25,10 @@
                         <columns>
                             <TableColumn fx:id="feasibleNameColumn" text="Name" />
                             <TableColumn fx:id="feasiblePrepTimeColumn" text="Preparation Time (min)" />
+                            <TableColumn fx:id="feasiblenoteColumn" editable="false" sortable="false" text="Note" />
                             <TableColumn fx:id="feasibleDifficultyColumn" text="Difficulty" />
                             <TableColumn fx:id="feasibleCategoryColumn" text="Category" />
+                            <TableColumn fx:id="feasiblecommentColumn" editable="false" sortable="false" text="Comment" />
                         </columns>
                     </TableView>
                 </AnchorPane>
@@ -39,9 +41,11 @@
                         <columns>
                             <TableColumn fx:id="incompleteNameColumn" text="Name" />
                             <TableColumn fx:id="incompletePrepTimeColumn" text="Preparation Time" />
+                            <TableColumn fx:id="incompletenoteColumn" editable="false" sortable="false" text="Note" />
                             <TableColumn fx:id="incompleteDifficultyColumn" text="Difficulty" />
                             <TableColumn fx:id="incompleteCategoryColumn" text="Category" />
                             <TableColumn fx:id="incompleteMissingIngredientsColumn" text="Missing Ingredients" />
+                            <TableColumn fx:id="incompletecommentColumn" editable="false" sortable="false" text="Comment" />
                         </columns>
                     </TableView>
                 </AnchorPane>

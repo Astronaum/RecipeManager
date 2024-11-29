@@ -25,6 +25,12 @@ public class FavoritesRecipesView extends InteractiveView implements Initializab
     private TableColumn<Recipe, String> nameColumn;
 
     @FXML
+    private TableColumn<Recipe, Integer> noteColumn;
+
+    @FXML
+    private TableColumn<Recipe, String> commentColumn;
+
+    @FXML
     private TableColumn<Recipe, Integer> prepTimeColumn;
 
     @FXML
@@ -49,6 +55,8 @@ public class FavoritesRecipesView extends InteractiveView implements Initializab
     public void initialize() {
         Helper.setTableViewProperties(favoritesTable);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
+        commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
         prepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
         difficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));

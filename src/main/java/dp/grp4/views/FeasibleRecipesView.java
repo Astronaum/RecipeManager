@@ -21,6 +21,7 @@ import java.util.Map;
 
 public class FeasibleRecipesView extends InteractiveView  implements InitializableView{
 
+
     @FXML
     private TableView<Recipe> feasibleRecipesTable;
 
@@ -31,7 +32,13 @@ public class FeasibleRecipesView extends InteractiveView  implements Initializab
     private TableColumn<Recipe, String> feasibleNameColumn;
 
     @FXML
+    private TableColumn<Recipe, Integer> feasiblenoteColumn;
+
+    @FXML
     private TableColumn<Recipe, Integer> feasiblePrepTimeColumn;
+
+    @FXML
+    private TableColumn<Recipe, String> feasiblecommentColumn;
 
     @FXML
     private TableColumn<Recipe, Recipe.Difficulty> feasibleDifficultyColumn;
@@ -44,6 +51,12 @@ public class FeasibleRecipesView extends InteractiveView  implements Initializab
 
     @FXML
     private TableColumn<Recipe, Integer> incompletePrepTimeColumn;
+
+    @FXML
+    private TableColumn<Recipe, Integer> incompletenoteColumn;
+
+    @FXML
+    private TableColumn<Recipe, Integer> incompletecommentColumn;
 
     @FXML
     private TableColumn<Recipe, Recipe.Difficulty> incompleteDifficultyColumn;
@@ -69,12 +82,16 @@ public class FeasibleRecipesView extends InteractiveView  implements Initializab
     public void initialize() {
         List.of(feasibleRecipesTable,incompleteRecipesTable).forEach(Helper::setTableViewProperties);
         feasibleNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        feasiblecommentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
         feasiblePrepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
+        feasiblenoteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
         feasibleDifficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         feasibleCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
 
         incompleteNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        incompletecommentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
         incompletePrepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
+        incompletenoteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
         incompleteDifficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         incompleteCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
 

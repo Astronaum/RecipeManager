@@ -20,7 +20,12 @@
         <Label styleClass="input-label" text="Temps de Préparation (min) :" />
         <TextField fx:id="prepTimeField" promptText="Temps en minutes" styleClass="input-field" />
     </HBox>
-
+    <HBox spacing="10">
+        <Label styleClass="input-label" text="Note :" />
+        <TextField fx:id="noteField" promptText="Entrez le note de la recette" styleClass="input-field" />
+        <Label styleClass="input-label" text="Commentaire :" />
+        <TextArea fx:id="commentField" prefHeight="0.0" prefWidth="271.0" promptText="Commentaires sur la recette" styleClass="input-field" />
+    </HBox>
     <HBox spacing="10" />
 
     <HBox spacing="10">

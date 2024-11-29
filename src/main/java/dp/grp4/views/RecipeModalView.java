@@ -29,6 +29,12 @@ public class RecipeModalView extends ModalView {
     private TextField prepTimeField;
 
     @FXML
+    private TextField noteField;
+
+    @FXML
+    private TextArea commentField;
+
+    @FXML
     private ComboBox<Recipe.Difficulty> difficultyComboBox;
 
     @FXML
@@ -126,6 +132,8 @@ public class RecipeModalView extends ModalView {
             modalTitle.setText("Modifier une Recette");
             nameField.setText(recipe.getName());
             prepTimeField.setText(String.valueOf(recipe.getPreparationTime()));
+            noteField.setText(String.valueOf(recipe.getNote()));
+            commentField.setText(recipe.getComment());
             difficultyComboBox.setValue(recipe.getDifficulty());
             categoryComboBox.setValue(recipe.getCategory());
             instructionsField.setText(recipe.getInstructionsList() != null
@@ -156,6 +164,8 @@ public class RecipeModalView extends ModalView {
         modalTitle.setText("Ajouter une Recette");
         nameField.clear();
         prepTimeField.clear();
+        noteField.clear();
+        commentField.clear();
         difficultyComboBox.setValue(null);
         categoryComboBox.setValue(null);
         instructionsField.clear();
@@ -239,6 +249,8 @@ public class RecipeModalView extends ModalView {
 
             Recipe recipe = (recipeToEdit == null) ? new Recipe() : recipeToEdit;
             recipe.setName(nameField.getText());
+            recipe.setNote(Integer.parseInt(String.valueOf(Integer.parseInt(noteField.getText()))));
+            recipe.setComment(commentField.getText());
             recipe.setPreparationTime(Integer.parseInt(prepTimeField.getText()));
             recipe.setDifficulty(difficultyComboBox.getValue());
             recipe.setCategory(categoryComboBox.getValue());

@@ -28,6 +28,11 @@ public class RecipesView extends InteractiveView implements InitializableView{
     private TableColumn<Recipe, String> idColumn;
     @FXML
     private TableColumn<Recipe, Integer> prepTimeColumn;
+    @FXML
+    private TableColumn<Recipe, Integer> noteColumn;
+
+    @FXML
+    private TableColumn<Recipe, String> commentColumn;
 
     @FXML
     private TableColumn<Recipe, Recipe.Difficulty> difficultyColumn;
@@ -87,9 +92,11 @@ public class RecipesView extends InteractiveView implements InitializableView{
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
         prepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
         difficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
 
         favoriteColumn.setCellFactory(column -> new TableCell<>() {
             private final Button favoriteButton = new Button("☆");
