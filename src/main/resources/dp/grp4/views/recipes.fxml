@@ -11,43 +11,46 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 
-<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="800.0" stylesheets="@styles/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dp.grp4.views.RecipesView">
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="958.0" stylesheets="@styles/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dp.grp4.views.RecipesView">
     <!-- Title Label -->
-    <Label layoutX="20" layoutY="20" styleClass="title-label" text="Gestion des Recettes" />
-    <Button fx:id="viewFeasibleButton" layoutY="20.0" onAction="#onViewFeasibleRecipes" styleClass="action-button" text="Voir Recettes Faisables" AnchorPane.rightAnchor="20.0" />
-    <Button fx:id="showFavoritesButton" layoutX="467.0" layoutY="20.0" onAction="#onShowFavorites" styleClass="action-button" text="Voir Recettes Favoris" AnchorPane.rightAnchor="187.0" />
+    <Label layoutX="20" layoutY="20" styleClass="title-label" text="Recipes" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+    <Button fx:id="viewFeasibleButton" layoutX="119.0" layoutY="74.0" onAction="#onViewFeasibleRecipes" styleClass="action-button" text="Feasible Recipes" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0" />
+    <Button fx:id="showFavoritesButton" layoutX="156.0" layoutY="69.0" onAction="#onShowFavorites" styleClass="action-button" text="Favourites" AnchorPane.leftAnchor="156.0" AnchorPane.topAnchor="69.0" />
 
     <!-- Search Section -->
-    <HBox layoutY="70.0" spacing="10" styleClass="search-section" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-        <TextField fx:id="searchNameField" promptText="Nom de la recette" styleClass="search-field" HBox.hgrow="ALWAYS" />
-        <CheckBox fx:id="favoritesCheckBox" styleClass="search-checkbox" text="Favoris seulement" HBox.hgrow="NEVER" />
-        <ComboBox fx:id="categoryComboBox" promptText="Catégorie" styleClass="search-combobox" HBox.hgrow="ALWAYS" />
-        <ComboBox fx:id="difficultyComboBox" promptText="Difficulté" styleClass="search-combobox" HBox.hgrow="ALWAYS" />
-        <TextField fx:id="maxPrepTimeField" promptText="Temps max (min)" styleClass="search-field" HBox.hgrow="ALWAYS" />
+    <HBox alignment="CENTER" layoutX="20.0" layoutY="119.0" prefHeight="46.0" prefWidth="886.0" spacing="10" styleClass="search-section" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="120.0">
+        <TextField fx:id="searchNameField" prefHeight="40.0" prefWidth="230.0" promptText="Name" styleClass="search-field" HBox.hgrow="NEVER" />
+        <ComboBox fx:id="categoryComboBox" prefHeight="27.0" prefWidth="114.0" promptText="Category" styleClass="search-combobox" HBox.hgrow="ALWAYS" />
+        <ComboBox fx:id="difficultyComboBox" prefHeight="40.0" prefWidth="103.0" promptText="Difficulty" styleClass="search-combobox" HBox.hgrow="NEVER" />
+        <CheckBox fx:id="favoritesCheckBox" prefHeight="17.0" prefWidth="74.0" styleClass="search-checkbox" text="Favourite" HBox.hgrow="NEVER" />
+        <TextField fx:id="maxPrepTimeField" prefHeight="40.0" prefWidth="142.0" promptText="Preparation Time (min)" styleClass="search-field" HBox.hgrow="NEVER" />
+      <Region prefHeight="40.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
         <RadioButton fx:id="orRadioButton" selected="true" styleClass="search-radio" text="OR" HBox.hgrow="NEVER">
             <toggleGroup>
                 <ToggleGroup fx:id="logicToggleGroup" />
             </toggleGroup>
         </RadioButton>
         <RadioButton fx:id="andRadioButton" styleClass="search-radio" text="AND" toggleGroup="$logicToggleGroup" HBox.hgrow="NEVER" />
-        <Button onAction="#onSearchRecipes" styleClass="search-button" text="Rechercher" HBox.hgrow="NEVER" />
-        <Button fx:id="addRecipeButton" onAction="#onAddRecipe" styleClass="action-button" text="+" HBox.hgrow="NEVER" />
+        <Button onAction="#onSearchRecipes" prefHeight="43.0" prefWidth="41.0" styleClass="search-button" text="🔍" HBox.hgrow="NEVER" />
 
     </HBox>
 
     <!-- Table to display recipes -->
-    <TableView fx:id="recipesTable" layoutX="20.0" layoutY="150.0" styleClass="recipes-table" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="150.0">
+    <TableView fx:id="recipesTable" layoutX="20.0" layoutY="203.34544749362433" prefHeight="377.0" prefWidth="760.0" styleClass="recipes-table" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="203.0">
         <columns>
-            <TableColumn fx:id="idColumn" text="ID" />
-            <TableColumn fx:id="nameColumn" text="Nom" />
-            <TableColumn fx:id="prepTimeColumn" text="Temps de Préparation" />
-            <TableColumn fx:id="difficultyColumn" text="Difficulté" />
-            <TableColumn fx:id="categoryColumn" text="Catégorie" />
-            <TableColumn fx:id="favoriteColumn" text="Favoris" />
-            <TableColumn fx:id="actionsColumn" text="Actions" />
+            <TableColumn fx:id="idColumn" editable="false" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" text="ID" />
+            <TableColumn fx:id="nameColumn" editable="false" sortable="false" text="Name" />
+            <TableColumn fx:id="prepTimeColumn" editable="false" sortable="false" text="Preparation Time (min)" />
+            <TableColumn fx:id="difficultyColumn" editable="false" sortable="false" text="Difficulty" />
+            <TableColumn fx:id="categoryColumn" editable="false" sortable="false" text="Category" />
+            <TableColumn fx:id="favoriteColumn" editable="false" sortable="false" text="Favourite" />
+            <TableColumn fx:id="actionsColumn" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" sortable="false" text="Actions" />
         </columns>
     </TableView>
-     <Button fx:id="showHomeButton" layoutX="380.0" layoutY="20.0" onAction="#goHome" styleClass="action-button" text="Accueil" AnchorPane.rightAnchor="351.3333333333333" AnchorPane.topAnchor="20.0" />
+     <Button fx:id="showHomeButton" layoutX="710.0" layoutY="20.0" onAction="#goHome" prefWidth="70.0" styleClass="action-button" text="Home" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+     <Button fx:id="addRecipeButton" layoutX="901.0" layoutY="67.0" onAction="#onAddRecipe" styleClass="action-button" text="+" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0" />
+   <Button fx:id="showHomeButton1" layoutX="734.0" layoutY="20.0" onMouseClicked="#goToIngredients" prefWidth="120.0" styleClass="action-button" text="Ingredients" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="20.0" />
 
 </AnchorPane>

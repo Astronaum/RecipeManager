@@ -44,7 +44,7 @@ public class RecipeDAO implements RecipeIDAO{
     public void update(Recipe recipe) throws DBException {
         Map<Long,Object> collection=DB.getCollection(Recipe.class);
         if(!collection.containsKey(recipe.getId()))
-            throw new DBException("Can not find the item with ID="+recipe.getId());
+            throw new DBException("Can not find the item with ID="+recipe.getId(),5);
         collection.put(recipe.getId(),recipe);
         DB.setCollection(Recipe.class,collection);
     }

@@ -16,6 +16,7 @@ public abstract class ModalView extends InteractiveView {
     }
     protected Stage initStage(){
         this.stage = new Stage();
+        this.stage.getIcons().add(ViewsManager.getInstance().getAppIcon());
         this.stage.initModality(Modality.WINDOW_MODAL);
         this.stage.initOwner(this.parentStage);
         this.stage.setScene(this.scene);

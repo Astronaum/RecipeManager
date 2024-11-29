@@ -25,10 +25,7 @@ public class HomeView extends InteractiveView {
         this.getController().gotoIngredients();
     }
 
-    public void openModal(MouseEvent e) {
-        ConfirmModalView modalView = Helper.getViewInstance(ConfirmModalView.class);
-        modalView.setModalText("Ensure that this.data.get(collectionName) contains correctly typed objects (e.g., Recipe instances). Add type checks during the deserialization process or explicitly cast objects when accessing the map.No direct changes to this method are required unless you want to enforce type-safety when writing back the collection.");
-        this.getController().fireOrder(OrderType.SHOW_CONFIRM_MODAL);
-//        Helper.showAlert(Alert.AlertType.ERROR,"Title","This is a message!This is a message!This is a message!This is a message!This is a message!This is a message!This is a message!This is a message!This is a message!This is a message!");
+    public void openSettings(MouseEvent mouseEvent) {
+        this.getController().fireOrder(OrderType.SHOW_SETTINGS);
     }
 }

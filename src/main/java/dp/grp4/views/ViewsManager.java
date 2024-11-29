@@ -9,19 +9,25 @@ import dp.grp4.orders.OrderType;
 import javafx.stage.Stage;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
+import javafx.scene.image.Image;
+import static dp.grp4.orders.OrderType.*;
 
 public class ViewsManager implements OrderListener {
-    private static final List<Class<?>> managedViews= List.of(
-            HomeView.class,
-            IngredientsView.class,
-            RecipesView.class,
-            ConfirmModalView.class,
-            IngredientModalView.class,
-            RecipeModalView.class,
-            FeasibleRecipesView.class,
-            FavoritesRecipesView.class,
-            RecipeDetailsModalView.class
+    private static final int WINDOW_WIDTH=1000, WINDOW_HEIGHT=600;
+    private static final Image APP_ICON=new Image("/images/icon.png");
+    private static final String APP_TITLE="Recipes Manager";
+    private static final Map<OrderType,Class<?>> managedViews=Map.of(
+            SHOW_HOME,HomeView.class,
+            SHOW_INGREDIENTS,IngredientsView.class,
+            SHOW_RECIPES,RecipesView.class,
+            SHOW_CONFIRM_MODAL,ConfirmModalView.class,
+            SHOW_INGREDIENT_MODAL, IngredientModalView.class,
+            SHOW_RECIPE_MODAL,RecipeModalView.class,
+            SHOW_FEASIBLE_RECIPES,FeasibleRecipesView.class,
+            SHOW_FAVORITES,FavoritesRecipesView.class,
+            SHOW_RECIPE_DETAILS_MODAL,RecipeDetailsModalView.class,
+            SHOW_SETTINGS,SettingsView.class
     );
     private Stage stage;
     private  Collection<InteractiveView> views;
@@ -35,44 +41,42 @@ public class ViewsManager implements OrderListener {
     }
     public static void init(Stage stage){
         instance.stage = stage;
+        instance.stage.getIcons().add(APP_ICON);
+        instance.stage.setTitle(APP_TITLE);
+        instance.stage.setWidth(WINDOW_WIDTH);
+        instance.stage.setHeight(WINDOW_HEIGHT);
         instance.views = new HashSet<>();
-        for(Class<?> viewClass:managedViews)
+        for(Class<?> viewClass:managedViews.values())
             Helper.callClassMethod(viewClass,"create", instance);
     }
-
+    public void reloadViews(){
+        views.forEach(view->{
+            if (view instanceof InitializableView) ((InitializableView) view).initialize();
+        });
+    }
     @Override
     public void setSubscription(OrderFirer orderFirer) {
-        orderFirer.subscription(
-                this,
-                OrderType.values()
-        );
+        orderFirer.subscription(this, OrderType.values());
     }
     @Override
     public void processOrder(OrderType orderType) throws ViewsManagerException {
-        Class<?> viewClass= switch (orderType) {
-            case SHOW_INGREDIENTS ->IngredientsView.class;
-            case SHOW_RECIPES->RecipesView.class;
-            case SHOW_HOME->HomeView.class;
-            case SHOW_CONFIRM_MODAL-> ConfirmModalView.class;
-            case SHOW_INGREDIENT_MODAL -> IngredientModalView.class;
-            case SHOW_RECIPE_MODAL -> RecipeModalView.class;
-            case SHOW_RECIPE_DETAILS_MODAL -> RecipeDetailsModalView.class;
-            case SHOW_FEASIBLE_RECIPES -> FeasibleRecipesView.class;
-            case SHOW_FAVORITES -> FavoritesRecipesView.class;
-        };
+        Class<?> viewClass=managedViews.get(orderType);
         InteractiveView view = this.views.stream()
                 .filter(v -> v.getClass() == viewClass)
                 .findFirst()
-                .orElseThrow(() -> new ViewsManagerException("View not found: " + viewClass.getName()));
-        if(view instanceof ModalView){
+                .orElseThrow(() -> new ViewsManagerException("View "+viewClass.getName()+" not found"));
+        if(view instanceof ModalView)
             ((ModalView) view).open();
-            return;
+        else {
+            this.stage.setScene(view.getScene());
+            this.stage.show();
         }
-        this.stage.setScene(view.getScene());
-        this.stage.show();
     }
     public Stage getStage() {
         return this.stage;
+    }
+    public Image getAppIcon(){
+        return APP_ICON;
     }
     public void addView(InteractiveView view) {
         this.views.add(view);
@@ -81,7 +85,6 @@ public class ViewsManager implements OrderListener {
         return this.views.stream().filter(v-> v.getClass()==viewClassName).findFirst().orElseThrow();
     }
     public void launch() throws ViewsManagerException {
-        this.processOrder(OrderType.SHOW_HOME);
+        this.processOrder(SHOW_HOME);
     }
-
 }

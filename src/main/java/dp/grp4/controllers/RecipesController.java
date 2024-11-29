@@ -32,4 +32,8 @@ public class RecipesController extends Controller{
 
     public void gotoRecipes() {
     }
+
+    public void goToIngredients() {
+        this.fireOrder(OrderType.SHOW_INGREDIENTS);
+    }
 }

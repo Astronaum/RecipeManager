@@ -42,7 +42,7 @@ public class IngredientDAO implements IngredientIDAO{
     public void update(Ingredient ingredient) throws DBException {
         Map<Long,Object> collection=DB.getCollection(Ingredient.class);
         if(!collection.containsKey(ingredient.getId()))
-            throw new DBException("Can not find the item with ID="+ingredient.getId());
+            throw new DBException("Can not find the item with ID="+ingredient.getId(),5);
         collection.put(ingredient.getId(),ingredient);
         DB.setCollection(Ingredient.class,collection);
     }

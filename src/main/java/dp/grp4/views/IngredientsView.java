@@ -1,12 +1,9 @@
 package dp.grp4.views;
 
 import dp.grp4.controllers.IngredientsController;
-import dp.grp4.exceptions.DBException;
 import dp.grp4.helpers.Helper;
 import dp.grp4.models.dao.IngredientDAO;
 import dp.grp4.models.entities.Ingredient;
-import dp.grp4.models.entities.Recipe;
-import dp.grp4.orders.OrderType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,13 +15,14 @@ import javafx.scene.layout.HBox;
 import java.io.IOException;
 import java.util.List;
 
-public class IngredientsView extends InteractiveView {
+public class IngredientsView extends InteractiveView implements InitializableView {
 
     @FXML
     private TableView<Ingredient> ingredientsTable;
 
     @FXML
     private TableColumn<Ingredient, String> idColumn;
+
     @FXML
     private TableColumn<Ingredient, String> nameColumn;
 
@@ -40,8 +38,6 @@ public class IngredientsView extends InteractiveView {
     @FXML
     private TableColumn<Ingredient, Void> actionColumn;
 
-    @FXML
-    private Button addButton;
     private final IngredientDAO ingredientDAO = IngredientDAO.getInstance();
     private final ObservableList<Ingredient> ingredientsList = FXCollections.observableArrayList();
     public static IngredientsView create(ViewsManager viewsManager) throws IOException {
@@ -52,8 +48,8 @@ public class IngredientsView extends InteractiveView {
     }
 
     @FXML
-    private void initialize() {
-        ingredientsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+    public void initialize() {
+        Helper.setTableViewProperties(ingredientsTable);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));

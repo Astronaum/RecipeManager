@@ -33,7 +33,6 @@ public class IngredientModalView extends ModalView {
     private final IngredientDAO ingredientDAO = IngredientDAO.getInstance();
 
     public static IngredientModalView create(ViewsManager viewsManager) throws IOException {
-        System.out.println("Loading Ingredient Modal FXML");
         IngredientModalView view = (IngredientModalView) ModalView.create(viewsManager, "ingredient_modal.fxml");
         IngredientModalController controller = IngredientModalController.create(viewsManager);
         view.setController(controller);
@@ -137,11 +136,6 @@ public class IngredientModalView extends ModalView {
     @Override
     public void open() {
         Stage modalStage = this.initStage();
-        if (ingredientToEdit == null) {
-            modalStage.setTitle("Ajouter Ingrédient");
-        } else {
-            modalStage.setTitle("Modifier Ingrédient");
-        }
         modalStage.setResizable(false);
         modalStage.setWidth(MODAL_WIDTH);
         modalStage.setHeight(MODAL_HEIGHT);

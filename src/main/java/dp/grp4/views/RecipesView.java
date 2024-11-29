@@ -4,9 +4,7 @@ import dp.grp4.controllers.RecipesController;
 import dp.grp4.exceptions.DBException;
 import dp.grp4.helpers.Helper;
 import dp.grp4.models.dao.RecipeDAO;
-import dp.grp4.models.entities.Ingredient;
 import dp.grp4.models.entities.Recipe;
-import dp.grp4.orders.OrderType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,10 +15,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
-public class RecipesView extends InteractiveView {
+public class RecipesView extends InteractiveView implements InitializableView{
 
     @FXML
     private TableView<Recipe> recipesTable;
@@ -79,8 +76,8 @@ public class RecipesView extends InteractiveView {
     }
 
     @FXML
-    private void initialize() {
-        recipesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+    public void initialize() {
+        Helper.setTableViewProperties(recipesTable);
         categoryComboBox.setItems(FXCollections.observableArrayList(Recipe.Category.values()));
         difficultyComboBox.setItems(FXCollections.observableArrayList(Recipe.Difficulty.values()));
 
@@ -260,4 +257,7 @@ public class RecipesView extends InteractiveView {
     }
 
 
+    public void goToIngredients(MouseEvent mouseEvent) {
+        this.getController().goToIngredients();
+    }
 }

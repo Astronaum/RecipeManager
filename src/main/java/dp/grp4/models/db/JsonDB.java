@@ -17,10 +17,10 @@ import java.nio.file.Paths;
 import java.io.IOException;
 
 public class JsonDB {
-    private static final String DATABASE_FOLDER= Configuration.DATABASE_FOLDER;
+    private static String databaseFolder=Configuration.DATABASE_FOLDER;
     private static final String METADATA_FILENAME= Configuration.METADATA_FILENAME;
     private static final String FILE_EXTENSION= Configuration.FILE_EXTENSION;
-    private static final JsonDB INSTANCE=new JsonDB();
+    private static JsonDB instance=new JsonDB();
     public record Metadata(String collectionName,long maxId){}
     private List<Metadata> metadataList;
     private final Map<String, Map<Long,Object>> data;
@@ -35,8 +35,9 @@ public class JsonDB {
     }
 
     public static JsonDB getInstance(){
-        return INSTANCE;
+        return instance;
     }
+
     private JsonDB(){
         this.metadataList=new ArrayList<>();
         this.data=new HashMap<>();
@@ -52,27 +53,29 @@ public class JsonDB {
     }
     private void loadData() {
         ExceptionHandler.context(()->{
-            Path path = Paths.get(DATABASE_FOLDER);
+            if(databaseFolder==null||databaseFolder.isBlank())
+                throw new DBException("Database directory is blank",0);
+            Path path = Paths.get(databaseFolder);
             if (!Files.exists(path))
                 try {
                     Files.createDirectories(path);
                 } catch (IOException e) {
-                    throw new DBException("Failed to create the Database directory.");
+                    throw new DBException("Failed to create the Database directory",1);
                 }
             List<String> collections=new ArrayList<>(this.data.keySet());
             for(int i = collections.size() - 1; i >= 0; i--){
                 String collectionName=collections.get(i);
-                File file = new File(Paths.get(DATABASE_FOLDER,collectionName+FILE_EXTENSION).toString());
+                File file = new File(Paths.get(databaseFolder,collectionName+FILE_EXTENSION).toString());
                 try {
                     if(file.createNewFile()){
                         this.jsonIO.writeValue(file, this.data.get(collectionName));
                     }else
                         this.readCollectionFromDB(collectionName);
                 } catch (Exception e) {
-                    throw new DBException(e.getMessage());
+                    throw new DBException(e.getMessage(),2);
                 }
             }
-            File metadataFile=new File(Paths.get(DATABASE_FOLDER,METADATA_FILENAME).toString());
+            File metadataFile=new File(Paths.get(databaseFolder,METADATA_FILENAME).toString());
             try {
                 if(metadataFile.createNewFile()){
                     this.jsonIO.writeValue(metadataFile, this.metadataList);
@@ -80,7 +83,7 @@ public class JsonDB {
                     this.metadataList= this.jsonIO.readValue(metadataFile, new TypeReference<>() {});
                 }
             } catch (Exception e) {
-                throw new DBException(e.getMessage());
+                throw new DBException(e.getMessage(),2);
             }
         });
     }
@@ -95,43 +98,43 @@ public class JsonDB {
                 this.metadataList.set(i,new Metadata(collectionName,nextId));
             }
         }
-        if(nextId==0) throw new DBException("Collection name not Found");
+        if(nextId==0) throw new DBException("Collection name not Found",3);
         return nextId;
     }
     private void writeMetaDataToDB() {
         ExceptionHandler.context(()-> {
-            File metadataFile = new File(Paths.get(DATABASE_FOLDER, METADATA_FILENAME).toString());
+            File metadataFile = new File(Paths.get(databaseFolder, METADATA_FILENAME).toString());
             try {
                 this.jsonIO.writeValue(metadataFile, this.metadataList);
             } catch (IOException e) {
-                throw new DBException(e.getMessage());
+                throw new DBException(e.getMessage(),2);
             }
         });
     }
     private void writeCollectionToDB(String collectionName)  {
         ExceptionHandler.context(()->{
-            File file = new File(Paths.get(DATABASE_FOLDER,collectionName+FILE_EXTENSION).toString());
+            File file = new File(Paths.get(databaseFolder,collectionName+FILE_EXTENSION).toString());
             try {
                 this.jsonIO.writeValue(file, this.data.get(collectionName));
             } catch (IOException e) {
-                throw new DBException(e.getMessage());
+                throw new DBException(e.getMessage(),2);
             }
             this.writeMetaDataToDB();
         });
     }
     private void readCollectionFromDB(String collectionName) {
         ExceptionHandler.context(()-> {
-            File file = new File(Paths.get(DATABASE_FOLDER, collectionName+FILE_EXTENSION).toString());
+            File file = new File(Paths.get(databaseFolder, collectionName+FILE_EXTENSION).toString());
             Map<Long, Object> map;
             try {
                 Class<?> clazz = Configuration.COLLECTIONS.stream()
                         .filter(c -> getNameFromClazz(c).equals(collectionName))
                         .findFirst()
-                        .orElseThrow(() -> new DBException("Class not found for collection: " + collectionName));
+                        .orElseThrow(() -> new DBException("Class not found for collection: " + collectionName,4));
                 map = this.jsonIO.readValue(file, this.jsonIO.getTypeFactory().constructMapType(
                         Map.class, Long.class, clazz));
             } catch (IOException e) {
-                throw new DBException(e.getMessage());
+                throw new DBException(e.getMessage(),2);
             }
             this.data.put(collectionName, map);
         });
@@ -143,5 +146,11 @@ public class JsonDB {
         this.data.put(getNameFromClazz(collectionClass),collection);
         this.writeCollectionToDB(getNameFromClazz(collectionClass));
     }
-
+    public static void setDBFolder(String s){
+        databaseFolder=s;
+        instance=new JsonDB();
+    }
+    public static String getDBFolder(){
+        return databaseFolder;
+    }
 }

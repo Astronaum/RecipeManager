@@ -1,6 +1,7 @@
 package dp.grp4.views;
 
 import dp.grp4.controllers.FavoritesRecipesController;
+import dp.grp4.helpers.Helper;
 import dp.grp4.models.dao.RecipeDAO;
 import dp.grp4.models.entities.Recipe;
 import javafx.collections.FXCollections;
@@ -15,7 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-public class FavoritesRecipesView extends InteractiveView {
+public class FavoritesRecipesView extends InteractiveView implements InitializableView {
 
     @FXML
     private TableView<Recipe> favoritesTable;
@@ -45,8 +46,8 @@ public class FavoritesRecipesView extends InteractiveView {
 
 
     @FXML
-    private void initialize() {
-        favoritesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+    public void initialize() {
+        Helper.setTableViewProperties(favoritesTable);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         prepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
         difficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));

@@ -1,6 +1,7 @@
 package dp.grp4.views;
 
 import dp.grp4.controllers.FeasibleRecipesController;
+import dp.grp4.helpers.Helper;
 import dp.grp4.models.dao.IngredientDAO;
 import dp.grp4.models.dao.RecipeDAO;
 import dp.grp4.models.entities.Ingredient;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class FeasibleRecipesView extends InteractiveView {
+public class FeasibleRecipesView extends InteractiveView  implements InitializableView{
 
     @FXML
     private TableView<Recipe> feasibleRecipesTable;
@@ -52,8 +53,8 @@ public class FeasibleRecipesView extends InteractiveView {
     @FXML
     private TableColumn<Recipe, String> incompleteMissingIngredientsColumn;
     private final RecipeDAO recipeDAO = RecipeDAO.getInstance();
-    private ObservableList<Recipe> feasibleRecipesList = FXCollections.observableArrayList();
-    private ObservableList<Recipe> incompleteRecipesList = FXCollections.observableArrayList();
+    private final ObservableList<Recipe> feasibleRecipesList = FXCollections.observableArrayList();
+    private final ObservableList<Recipe> incompleteRecipesList = FXCollections.observableArrayList();
 
     public static FeasibleRecipesView create(ViewsManager viewsManager) throws IOException {
         FeasibleRecipesController feasibleRecipesController=FeasibleRecipesController.create(viewsManager);
@@ -65,36 +66,32 @@ public class FeasibleRecipesView extends InteractiveView {
 
 
     @FXML
-    private void initialize() {
-        feasibleRecipesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+    public void initialize() {
+        List.of(feasibleRecipesTable,incompleteRecipesTable).forEach(Helper::setTableViewProperties);
         feasibleNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         feasiblePrepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
         feasibleDifficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         feasibleCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
-        incompleteRecipesTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+
         incompleteNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         incompletePrepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
         incompleteDifficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         incompleteCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+
         incompleteMissingIngredientsColumn.setCellValueFactory(cellData -> {
             Recipe recipe = cellData.getValue();
-
             try {
                 Map<Ingredient, Integer> missingIngredients = RecipeDAO.getInstance()
                         .getMissingIngredients(recipe, IngredientDAO.getInstance().getAll());
-
                 String missingIngredientsText = missingIngredients.entrySet().stream()
                         .map(entry -> entry.getKey().getName() + " (" + entry.getValue() + ")")
                         .reduce((a, b) -> a + ", " + b)
                         .orElse("Aucun ingrédient manquant");
-
                 return new SimpleStringProperty(missingIngredientsText);
             } catch (Exception e) {
-                e.printStackTrace();
                 return new SimpleStringProperty("Erreur lors du calcul");
             }
         });
-
         loadRecipesData();
     }
     @Override
@@ -105,24 +102,17 @@ public class FeasibleRecipesView extends InteractiveView {
         return super.getScene();
     }
     private void loadRecipesData() {
-        try {
             Map<String, List<Recipe>> categorizedRecipes = recipeDAO.suggestRecipes(IngredientDAO.getInstance().getAll());
             List<Recipe> complete = categorizedRecipes.get("Complete");
             List<Recipe> incomplete = categorizedRecipes.get("Incomplete");
             if (complete != null) {
                 feasibleRecipesList.setAll(complete);
             }
-
             if (incomplete != null) {
                 incompleteRecipesList.setAll(incomplete);
             }
-
             feasibleRecipesTable.setItems(feasibleRecipesList);
             incompleteRecipesTable.setItems(incompleteRecipesList);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public FeasibleRecipesController getController(){
