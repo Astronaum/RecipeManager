@@ -23,7 +23,7 @@
                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@/images/recipe.png" />
                </ImageView>
-               <Label styleClass="home-button-label" text="Reciepes" textAlignment="CENTER" textFill="WHITE" />
+               <Label styleClass="home-button-label" text="Recipes" textAlignment="CENTER" textFill="WHITE" />
             </VBox>
             <VBox alignment="CENTER" onMouseClicked="#gotoIngredients" prefHeight="238.0" prefWidth="190.0" spacing="10.0">
                <styleClass>

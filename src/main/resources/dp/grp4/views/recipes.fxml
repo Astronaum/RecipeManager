@@ -24,7 +24,7 @@
         <TextField fx:id="searchNameField" prefHeight="40.0" prefWidth="230.0" promptText="Name" styleClass="search-field" HBox.hgrow="NEVER" />
         <ComboBox fx:id="categoryComboBox" prefHeight="27.0" prefWidth="114.0" promptText="Category" styleClass="search-combobox" HBox.hgrow="ALWAYS" />
         <ComboBox fx:id="difficultyComboBox" prefHeight="40.0" prefWidth="103.0" promptText="Difficulty" styleClass="search-combobox" HBox.hgrow="NEVER" />
-        <CheckBox fx:id="favoritesCheckBox" prefHeight="17.0" prefWidth="74.0" styleClass="search-checkbox" text="Favourite" HBox.hgrow="NEVER" />
+        <CheckBox fx:id="favoritesCheckBox" prefHeight="17.0" prefWidth="74.0" styleClass="search-checkbox" text="Favourite" HBox.hgrow="NEVER" visible="false" managed="false" />
         <TextField fx:id="maxPrepTimeField" prefHeight="40.0" prefWidth="142.0" promptText="Preparation Time (min)" styleClass="search-field" HBox.hgrow="NEVER" />
       <Region prefHeight="40.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
         <RadioButton fx:id="orRadioButton" selected="true" styleClass="search-radio" text="OR" HBox.hgrow="NEVER">

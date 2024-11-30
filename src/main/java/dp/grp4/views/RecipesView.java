@@ -209,31 +209,75 @@ public class RecipesView extends InteractiveView implements InitializableView{
 
     @FXML
     private void onSearchRecipes() {
+
+        // Récupérer les valeurs des champs de recherche
         String name = searchNameField.getText().trim();
         Recipe.Category category = categoryComboBox.getValue();
         Recipe.Difficulty difficulty = difficultyComboBox.getValue();
-        boolean favoriteOnly = favoritesCheckBox.isSelected();
+        Boolean favoriteOnly = null;
         Integer maxPrepTime = null;
 
+        // Vérifier si le champ de temps maximum de préparation est valide
         if (!maxPrepTimeField.getText().isEmpty()) {
             try {
                 maxPrepTime = Integer.parseInt(maxPrepTimeField.getText().trim());
             } catch (NumberFormatException e) {
-                maxPrepTime = null;
+                // Afficher un message ou journaliser une erreur si nécessaire
+                System.err.println("Invalid preparation time input. Ignoring this filter.");
             }
         }
 
-        recipesList.clear();
-        boolean useAndLogic = andRadioButton.isSelected();
-        List<Recipe> filteredRecipes = recipeDAO.filter(
-                name.isEmpty() ? null : name,
-                category,
-                difficulty,
-                favoriteOnly ? Boolean.TRUE : null,
-                maxPrepTime,
-                useAndLogic
-        );
+        // Afficher ce que la méthode récupère de la vue
+        System.out.println("Search Parameters:");
+        System.out.println("Name: " + (name.isEmpty() ? "null" : name));
+        System.out.println("Category: " + (category != null ? category : "null"));
+        System.out.println("Difficulty: " + (difficulty != null ? difficulty : "null"));
+        System.out.println("Favorites Only: " + favoriteOnly);
+        System.out.println("Max Preparation Time: " + (maxPrepTime != null ? maxPrepTime : "null"));
+        System.out.println("Use AND Logic: " + andRadioButton.isSelected());
 
+        // Effacer les anciennes données de la table et de la liste
+        recipesTable.getItems().clear();
+        recipesList.clear();
+
+        // Déterminer si la logique AND ou OR doit être utilisée
+        boolean useAndLogic = andRadioButton.isSelected();
+
+        // Appeler la méthode filter avec les valeurs récupérées
+        List<Recipe> filteredRecipes;
+        if (name.isEmpty() && category == null && difficulty == null && favoriteOnly == null && maxPrepTime == null) {
+            // Appeler la méthode pour obtenir toutes les recettes
+            filteredRecipes = recipeDAO.getAll();  // Methode pour obtenir toutes les recettes sans filtre
+        } else {
+            // Appeler la méthode filter avec les valeurs récupérées
+            filteredRecipes = recipeDAO.filter(
+                    name.isEmpty() ? null : name, // Null si aucun nom n'est fourni
+                    category,                     // Catégorie (peut être null)
+                    difficulty,                   // Difficulté (peut être null)
+                    favoriteOnly,                 // Filtrer par favoris (peut être null)
+                    maxPrepTime,                  // Temps max de préparation (peut être null)
+                    useAndLogic                   // Logique (AND ou OR)
+            );
+        }
+
+        // Afficher les recettes filtrées dans les logs
+        System.out.println("Filtered Recipes:");
+        if (filteredRecipes.isEmpty()) {
+            System.out.println("No recipes match the search criteria.");
+        } else {
+            filteredRecipes.forEach(recipe -> {
+                System.out.println("Recipe ID: " + recipe.getId() +
+                        ", Name: " + recipe.getName() +
+                        ", Category: " + recipe.getCategory() +
+                        ", Difficulty: " + recipe.getDifficulty() +
+                        ", Preparation Time: " + recipe.getPreparationTime() +
+                        ", Favourite: " + recipe.isFavourite());
+            });
+        }
+
+        // Ajouter les résultats filtrés dans la liste et mettre à jour la table
+        recipesTable.getItems().clear();
+        recipesList.clear();
         recipesList.setAll(filteredRecipes);
         recipesTable.setItems(recipesList);
     }

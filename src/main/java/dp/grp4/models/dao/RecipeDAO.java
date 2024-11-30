@@ -102,58 +102,49 @@ public class RecipeDAO implements RecipeIDAO{
         for (Recipe recipe : allRecipes) {
             List<Recipe.IngredientQuantity> recipeIngredients = recipe.getIngredients();
 
-            // Count how many ingredients in the recipe have sufficient stock
+            //Comptez combien d'ingrédients dans la recette ont un stock suffisant.
             long matchCount = 0;
 
             for (Recipe.IngredientQuantity recipeIngredient : recipeIngredients) {
-                // Find the matching ingredient in available ingredients
                 Ingredient matchingIngredient = findIngredientById(availableIngredients, recipeIngredient.id());
 
                 if (matchingIngredient != null) {
-                    // Check if the available stock is sufficient
                     if (isSufficientStock(matchingIngredient, recipeIngredient)) {
                         matchCount++;
                     }
                 }
             }
 
-            // Calculate the match percentage
+            // Calcul du matching pourcentage
             double matchPercentage = (double) matchCount / recipeIngredients.size() * 100;
 
-            // Categorize the recipe based on the match percentage
             if (matchPercentage == 100) {
-                completeRecipes.add(recipe);  // Fully matched recipe
+                completeRecipes.add(recipe);  // Les complètes
             } else if (matchPercentage >= 50) {
-                incompleteRecipes.add(recipe);  // Incomplete but eligible recipe
+                incompleteRecipes.add(recipe);  // Les incomplètes
             } else {
-                notSuggestedRecipes.add(recipe);  // Recipe not suggested
+                notSuggestedRecipes.add(recipe);  // Les non suggérées
             }
         }
 
-        // Optionally, you can return all the recipes or different lists as needed
-        // For example, returning a Map or a custom object that holds all three categories
         Map<String, List<Recipe>> categorizedRecipes = new HashMap<>();
         categorizedRecipes.put("Complete", completeRecipes);
         categorizedRecipes.put("Incomplete", incompleteRecipes);
         categorizedRecipes.put("Not Suggested", notSuggestedRecipes);
 
-        // Return the map for further use, or just return a specific list if needed
         return categorizedRecipes;
     }
 
-    // Helper method to find ingredient by ID
     private Ingredient findIngredientById(List<Ingredient> ingredients, long id) {
         for (Ingredient ingredient : ingredients) {
             if (ingredient.getId() == id) {
                 return ingredient;
             }
         }
-        return null;  // If ingredient not found
+        return null;
     }
 
-    // Helper method to check if available stock is sufficient
     private boolean isSufficientStock(Ingredient ingredient, Recipe.IngredientQuantity recipeIngredient) {
-        // For simplicity, we assume ingredients are in the same unit in both the recipe and available stock
         return ingredient.getStock() >= recipeIngredient.quantity();
     }
     @Override

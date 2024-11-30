@@ -249,8 +249,8 @@ public class RecipeModalView extends ModalView {
 
             Recipe recipe = (recipeToEdit == null) ? new Recipe() : recipeToEdit;
             recipe.setName(nameField.getText());
-            recipe.setNote(Integer.parseInt(String.valueOf(Integer.parseInt(noteField.getText()))));
-            recipe.setComment(commentField.getText());
+            recipe.setNote((noteField.getText() == null || noteField.getText().isEmpty()) ? 0 : Integer.parseInt(noteField.getText()));
+            recipe.setComment((commentField.getText() == null || commentField.getText().isEmpty()) ? "No comments" : commentField.getText());
             recipe.setPreparationTime(Integer.parseInt(prepTimeField.getText()));
             recipe.setDifficulty(difficultyComboBox.getValue());
             recipe.setCategory(categoryComboBox.getValue());
