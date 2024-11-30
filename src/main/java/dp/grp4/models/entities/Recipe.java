@@ -34,7 +34,7 @@ public class Recipe {
         EASY, MEDIUM, HARD
     }
     public enum Criteria{
-        HALAL,VEGETARIAN
+        VEGAN,VEGETARIAN
     }
 
     public long getId() {

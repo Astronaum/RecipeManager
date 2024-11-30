@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipesView extends InteractiveView implements InitializableView{
@@ -246,8 +247,13 @@ public class RecipesView extends InteractiveView implements InitializableView{
         // Appeler la méthode filter avec les valeurs récupérées
         List<Recipe> filteredRecipes;
         if (name.isEmpty() && category == null && difficulty == null && favoriteOnly == null && maxPrepTime == null) {
-            // Appeler la méthode pour obtenir toutes les recettes
-            filteredRecipes = recipeDAO.getAll();  // Methode pour obtenir toutes les recettes sans filtre
+            if (useAndLogic) {
+                // Logique AND : tout est vide -> aucun résultat
+                filteredRecipes = new ArrayList<>(); // Liste vide
+            } else {
+                // Logique OR : tout est vide -> obtenir toutes les recettes
+                filteredRecipes = recipeDAO.getAll();
+            }
         } else {
             // Appeler la méthode filter avec les valeurs récupérées
             filteredRecipes = recipeDAO.filter(
@@ -259,6 +265,9 @@ public class RecipesView extends InteractiveView implements InitializableView{
                     useAndLogic                   // Logique (AND ou OR)
             );
         }
+
+        recipesTable.getItems().clear();
+        recipesList.clear();
 
         // Afficher les recettes filtrées dans les logs
         System.out.println("Filtered Recipes:");
