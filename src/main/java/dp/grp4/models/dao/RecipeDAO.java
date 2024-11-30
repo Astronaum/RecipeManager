@@ -60,6 +60,7 @@ public class RecipeDAO implements RecipeIDAO{
             String name,
             Recipe.Category category,
             Recipe.Difficulty difficulty,
+            Recipe.Criteria criteria,
             Boolean favourite,
             Integer maxPreparationTime,
             boolean useAndLogic
@@ -72,6 +73,7 @@ public class RecipeDAO implements RecipeIDAO{
                     boolean matchesName = (name == null || recipe.getName().toLowerCase().contains(name.toLowerCase()));
                     boolean matchesCategory = (category == null || recipe.getCategory() == category);
                     boolean matchesDifficulty = (difficulty == null || recipe.getDifficulty() == difficulty);
+                    boolean matchesCriteria = (criteria == null || recipe.getCriteria() == criteria);
                     boolean matchesFavourite = (favourite == null || recipe.isFavourite() == favourite);
                     boolean matchesPreparationTime = (maxPreparationTime == null || recipe.getPreparationTime() <= maxPreparationTime);
 
@@ -84,6 +86,7 @@ public class RecipeDAO implements RecipeIDAO{
                         return (name != null && matchesName)
                                 || (category != null && matchesCategory)
                                 || (difficulty != null && matchesDifficulty)
+                                || (criteria != null && matchesCriteria)
                                 || (favourite != null && matchesFavourite)
                                 || (maxPreparationTime != null && matchesPreparationTime);
                     }

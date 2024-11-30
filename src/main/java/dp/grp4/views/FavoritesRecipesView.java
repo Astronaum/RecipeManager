@@ -39,6 +39,9 @@ public class FavoritesRecipesView extends InteractiveView implements Initializab
     @FXML
     private TableColumn<Recipe, Recipe.Category> categoryColumn;
 
+    @FXML
+    private TableColumn<Recipe, Recipe.Criteria> criteriaColumn;
+
     private final RecipeDAO recipeDAO = RecipeDAO.getInstance();
     private ObservableList<Recipe> favoriteRecipesList = FXCollections.observableArrayList();
 
@@ -60,6 +63,7 @@ public class FavoritesRecipesView extends InteractiveView implements Initializab
         prepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
         difficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        criteriaColumn.setCellValueFactory(new PropertyValueFactory<>("criteria"));
 
         loadFavoriteRecipesData();
     }

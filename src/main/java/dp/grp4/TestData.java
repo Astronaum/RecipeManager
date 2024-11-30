@@ -107,7 +107,7 @@ public class TestData {
         recipeDAO.add(r);
 
         System.out.println("Testing filters ------------------");
-        List<Recipe> andRecipes = recipeDAO.filter(
+        /*List<Recipe> andRecipes = recipeDAO.filter(
                 null, Recipe.Category.MAIN, Recipe.Difficulty.EASY, null, null, true
         );
 
@@ -134,6 +134,6 @@ public class TestData {
         System.out.println("Incomplete Recipes: " + incomplete.size());
         incomplete.forEach(recipe -> System.out.println(recipe.getName()));
         System.out.println("Not Suggested Recipes: " + notSuggested.size());
-        notSuggested.forEach(recipe -> System.out.println(recipe.getName()));
+        notSuggested.forEach(recipe -> System.out.println(recipe.getName()));*/
     }
 }

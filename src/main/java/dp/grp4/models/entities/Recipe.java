@@ -11,7 +11,7 @@ public class Recipe {
     private int preparationTime; // minutes
     private int cookingTime; // minutes
     private Difficulty difficulty;
-    private Set<Criteria> criteriaSet;
+    private Criteria criteria;
     private List<IngredientQuantity> ingredients;
     private List<String> instructionsList;
     private int note; // x/10
@@ -34,7 +34,21 @@ public class Recipe {
         EASY, MEDIUM, HARD
     }
     public enum Criteria{
-        VEGAN,VEGETARIAN
+        VEGAN,
+        VEGETARIAN,
+        PESCATARIAN,
+        GLUTEN_FREE,
+        LACTOSE_FREE,
+        KETO,
+        LOW_CARB,
+        PALEO,
+        HALAL,
+        KOSHER,
+        NUT_FREE,
+        SUGAR_FREE,
+        ORGANIC,
+        DAIRY_FREE,
+        SPICY
     }
 
     public long getId() {
@@ -73,11 +87,11 @@ public class Recipe {
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }
-    public Set<Criteria> getCriteriaSet() {
-        return criteriaSet;
+    public Criteria getCriteria() {
+        return criteria;
     }
-    public void setCriteriaSet(Set<Criteria> criteriaSet) {
-        this.criteriaSet = criteriaSet;
+    public void setCriteria(Criteria criteria) {
+        this.criteria = criteria;
     }
     public List<IngredientQuantity> getIngredients() {
         return ingredients;
@@ -122,7 +136,7 @@ public class Recipe {
         this.preparationTime = builder.preparationTime;
         this.cookingTime = builder.cookingTime;
         this.difficulty = builder.difficulty;
-        this.criteriaSet = builder.criteriaSet;
+        this.criteria = builder.criteria;
         this.ingredients = builder.ingredients;
         this.instructionsList = builder.instructionsList;
         this.note = builder.note;
@@ -139,7 +153,7 @@ public class Recipe {
         private int preparationTime; // minutes
         private int cookingTime; // minutes
         private Difficulty difficulty;
-        private Set<Criteria> criteriaSet;
+        private Criteria criteria;
         private List<IngredientQuantity> ingredients;
         private List<String> instructionsList;
         private int note; // x/10
@@ -176,8 +190,8 @@ public class Recipe {
             return this;
         }
 
-        public Recipe.Builder setCriteriaSet(Set<Criteria> criteriaSet) {
-            this.criteriaSet = criteriaSet;
+        public Recipe.Builder setCriteria(Criteria criteria) {
+            this.criteria = criteria;
             return this;
         }
 

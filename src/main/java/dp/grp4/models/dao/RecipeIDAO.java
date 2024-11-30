@@ -17,6 +17,7 @@ public interface RecipeIDAO {
             String name,
             Recipe.Category category,
             Recipe.Difficulty difficulty,
+            Recipe.Criteria criteria,
             Boolean favourite,
             Integer maxPreparationTime,
             boolean useAndLogic

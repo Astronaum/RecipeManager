@@ -41,6 +41,9 @@ public class RecipeModalView extends ModalView {
     private ComboBox<Recipe.Category> categoryComboBox;
 
     @FXML
+    private ComboBox<Recipe.Criteria> criteriaComboBox;
+
+    @FXML
     private ComboBox<Ingredient> ingredientComboBox;
 
     @FXML
@@ -81,6 +84,7 @@ public class RecipeModalView extends ModalView {
 
         difficultyComboBox.setItems(FXCollections.observableArrayList(Recipe.Difficulty.values()));
         categoryComboBox.setItems(FXCollections.observableArrayList(Recipe.Category.values()));
+        criteriaComboBox.setItems(FXCollections.observableArrayList(Recipe.Criteria.values()));
 
         try {
             List<Ingredient> allIngredients = IngredientDAO.getInstance().getAll();
@@ -136,6 +140,7 @@ public class RecipeModalView extends ModalView {
             commentField.setText(recipe.getComment());
             difficultyComboBox.setValue(recipe.getDifficulty());
             categoryComboBox.setValue(recipe.getCategory());
+            criteriaComboBox.setValue(recipe.getCriteria());
             instructionsField.setText(recipe.getInstructionsList() != null
                     ? String.join("\n", recipe.getInstructionsList())
                     : "");
@@ -168,6 +173,7 @@ public class RecipeModalView extends ModalView {
         commentField.clear();
         difficultyComboBox.setValue(null);
         categoryComboBox.setValue(null);
+        criteriaComboBox.setValue(null);
         instructionsField.clear();
         ingredientsMap.clear();
         ingredientTableData.clear();
@@ -254,6 +260,7 @@ public class RecipeModalView extends ModalView {
             recipe.setPreparationTime(Integer.parseInt(prepTimeField.getText()));
             recipe.setDifficulty(difficultyComboBox.getValue());
             recipe.setCategory(categoryComboBox.getValue());
+            recipe.setCriteria(criteriaComboBox.getValue());
             recipe.setInstructionsList(List.of(instructionsField.getText().split("\n")));
             recipe.setIngredients(new ArrayList<>(ingredientsMap.entrySet().stream()
                     .map(entry -> new Recipe.IngredientQuantity(entry.getKey().getId(), entry.getValue()))

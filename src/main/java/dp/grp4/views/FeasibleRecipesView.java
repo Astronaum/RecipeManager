@@ -47,6 +47,9 @@ public class FeasibleRecipesView extends InteractiveView  implements Initializab
     private TableColumn<Recipe, Recipe.Category> feasibleCategoryColumn;
 
     @FXML
+    private TableColumn<Recipe, Recipe.Criteria> feasibleCriteriaColumn;
+
+    @FXML
     private TableColumn<Recipe, String> incompleteNameColumn;
 
     @FXML
@@ -63,6 +66,9 @@ public class FeasibleRecipesView extends InteractiveView  implements Initializab
 
     @FXML
     private TableColumn<Recipe, Recipe.Category> incompleteCategoryColumn;
+    @FXML
+    private TableColumn<Recipe, Recipe.Criteria> incompleteCriteriaColumn;
+
     @FXML
     private TableColumn<Recipe, String> incompleteMissingIngredientsColumn;
     private final RecipeDAO recipeDAO = RecipeDAO.getInstance();
@@ -87,6 +93,7 @@ public class FeasibleRecipesView extends InteractiveView  implements Initializab
         feasiblenoteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
         feasibleDifficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         feasibleCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        feasibleCriteriaColumn.setCellValueFactory(new PropertyValueFactory<>("criteria"));
 
         incompleteNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         incompletecommentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
@@ -94,6 +101,7 @@ public class FeasibleRecipesView extends InteractiveView  implements Initializab
         incompletenoteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
         incompleteDifficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         incompleteCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        incompleteCriteriaColumn.setCellValueFactory(new PropertyValueFactory<>("criteria"));
 
         incompleteMissingIngredientsColumn.setCellValueFactory(cellData -> {
             Recipe recipe = cellData.getValue();

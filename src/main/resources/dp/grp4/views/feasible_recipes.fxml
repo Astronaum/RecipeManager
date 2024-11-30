@@ -28,6 +28,7 @@
                             <TableColumn fx:id="feasiblenoteColumn" editable="false" sortable="false" text="Note" />
                             <TableColumn fx:id="feasibleDifficultyColumn" text="Difficulty" />
                             <TableColumn fx:id="feasibleCategoryColumn" text="Category" />
+                            <TableColumn fx:id="feasibleCriteriaColumn" text="Criteria" />
                             <TableColumn fx:id="feasiblecommentColumn" editable="false" sortable="false" text="Comment" />
                         </columns>
                     </TableView>
@@ -44,6 +45,7 @@
                             <TableColumn fx:id="incompletenoteColumn" editable="false" sortable="false" text="Note" />
                             <TableColumn fx:id="incompleteDifficultyColumn" text="Difficulty" />
                             <TableColumn fx:id="incompleteCategoryColumn" text="Category" />
+                            <TableColumn fx:id="incompleteCriteriaColumn" text="Criteria" />
                             <TableColumn fx:id="incompleteMissingIngredientsColumn" text="Missing Ingredients" />
                             <TableColumn fx:id="incompletecommentColumn" editable="false" sortable="false" text="Comment" />
                         </columns>

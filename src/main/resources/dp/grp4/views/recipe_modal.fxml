@@ -33,6 +33,8 @@
         <ComboBox fx:id="difficultyComboBox" prefHeight="52.0" prefWidth="149.0" promptText="Sélectionner" styleClass="input-field" />
         <Label styleClass="input-label" text="Catégorie :" />
         <ComboBox fx:id="categoryComboBox" promptText="Sélectionner" styleClass="input-field" />
+        <Label styleClass="input-label" text="Critère :" />
+        <ComboBox fx:id="criteriaComboBox" promptText="Sélectionner" styleClass="input-field" />
     </HBox>
 
     <HBox spacing="10" />

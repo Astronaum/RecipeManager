@@ -84,9 +84,9 @@ public class IngredientModalView extends ModalView {
             }
 
             int stock = Integer.parseInt(stockField.getText());
-            if (stock <= 0) {
+            /*if (stock <= 0) {
                 throw new IllegalArgumentException("Le stock doit être supérieur à 0.");
-            }
+            }*/
 
             Ingredient.Unit unit = unitComboBox.getValue();
             if (unit == null) {

@@ -42,6 +42,9 @@ public class RecipesView extends InteractiveView implements InitializableView{
     private TableColumn<Recipe, Recipe.Category> categoryColumn;
 
     @FXML
+    private TableColumn<Recipe, Recipe.Criteria> criteriaColumn;
+
+    @FXML
     private TableColumn<Recipe, Void> favoriteColumn;
 
     @FXML
@@ -58,6 +61,9 @@ public class RecipesView extends InteractiveView implements InitializableView{
 
     @FXML
     private ComboBox<Recipe.Difficulty> difficultyComboBox;
+
+    @FXML
+    private ComboBox<Recipe.Criteria> criteriaComboBox;
 
     @FXML
     private TextField maxPrepTimeField;
@@ -86,6 +92,7 @@ public class RecipesView extends InteractiveView implements InitializableView{
         Helper.setTableViewProperties(recipesTable);
         categoryComboBox.setItems(FXCollections.observableArrayList(Recipe.Category.values()));
         difficultyComboBox.setItems(FXCollections.observableArrayList(Recipe.Difficulty.values()));
+        criteriaComboBox.setItems(FXCollections.observableArrayList(Recipe.Criteria.values()));
 
         logicToggleGroup = new ToggleGroup();
         andRadioButton.setToggleGroup(logicToggleGroup);
@@ -97,6 +104,7 @@ public class RecipesView extends InteractiveView implements InitializableView{
         prepTimeColumn.setCellValueFactory(new PropertyValueFactory<>("preparationTime"));
         difficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        criteriaColumn.setCellValueFactory(new PropertyValueFactory<>("criteria"));
         commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
 
         favoriteColumn.setCellFactory(column -> new TableCell<>() {
@@ -215,6 +223,7 @@ public class RecipesView extends InteractiveView implements InitializableView{
         String name = searchNameField.getText().trim();
         Recipe.Category category = categoryComboBox.getValue();
         Recipe.Difficulty difficulty = difficultyComboBox.getValue();
+        Recipe.Criteria criteria = criteriaComboBox.getValue();
         Boolean favoriteOnly = null;
         Integer maxPrepTime = null;
 
@@ -233,6 +242,7 @@ public class RecipesView extends InteractiveView implements InitializableView{
         System.out.println("Name: " + (name.isEmpty() ? "null" : name));
         System.out.println("Category: " + (category != null ? category : "null"));
         System.out.println("Difficulty: " + (difficulty != null ? difficulty : "null"));
+        System.out.println("Criteria: " + (criteria != null ? criteria : "null"));
         System.out.println("Favorites Only: " + favoriteOnly);
         System.out.println("Max Preparation Time: " + (maxPrepTime != null ? maxPrepTime : "null"));
         System.out.println("Use AND Logic: " + andRadioButton.isSelected());
@@ -259,7 +269,8 @@ public class RecipesView extends InteractiveView implements InitializableView{
             filteredRecipes = recipeDAO.filter(
                     name.isEmpty() ? null : name, // Null si aucun nom n'est fourni
                     category,                     // Catégorie (peut être null)
-                    difficulty,                   // Difficulté (peut être null)
+                    difficulty,
+                    criteria,
                     favoriteOnly,                 // Filtrer par favoris (peut être null)
                     maxPrepTime,                  // Temps max de préparation (peut être null)
                     useAndLogic                   // Logique (AND ou OR)
@@ -279,6 +290,7 @@ public class RecipesView extends InteractiveView implements InitializableView{
                         ", Name: " + recipe.getName() +
                         ", Category: " + recipe.getCategory() +
                         ", Difficulty: " + recipe.getDifficulty() +
+                        ", Criteria: " + recipe.getCriteria()+
                         ", Preparation Time: " + recipe.getPreparationTime() +
                         ", Favourite: " + recipe.isFavourite());
             });

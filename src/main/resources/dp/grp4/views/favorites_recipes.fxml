@@ -19,6 +19,7 @@
             <TableColumn fx:id="noteColumn" editable="false" sortable="false" text="Note" />
             <TableColumn fx:id="difficultyColumn" text="Difficulty" />
             <TableColumn fx:id="categoryColumn" text="Category" />
+            <TableColumn fx:id="criteriaColumn" text="Criteria" />
             <TableColumn fx:id="commentColumn" editable="false" sortable="false" text="Comment" />
 
         </columns>
