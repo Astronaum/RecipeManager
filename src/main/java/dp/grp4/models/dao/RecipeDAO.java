@@ -61,7 +61,6 @@ public class RecipeDAO implements RecipeIDAO{
             Recipe.Category category,
             Recipe.Difficulty difficulty,
             Recipe.Criteria criteria,
-            Boolean favourite,
             Integer maxPreparationTime,
             boolean useAndLogic
     ) {
@@ -74,25 +73,25 @@ public class RecipeDAO implements RecipeIDAO{
                     boolean matchesCategory = (category == null || recipe.getCategory() == category);
                     boolean matchesDifficulty = (difficulty == null || recipe.getDifficulty() == difficulty);
                     boolean matchesCriteria = (criteria == null || recipe.getCriteria() == criteria);
-                    boolean matchesFavourite = (favourite == null || recipe.isFavourite() == favourite);
                     boolean matchesPreparationTime = (maxPreparationTime == null || recipe.getPreparationTime() <= maxPreparationTime);
 
-                    // Logique AND : toutes les conditions doivent être vraies
                     if (useAndLogic) {
-                        return matchesName && matchesCategory && matchesDifficulty && matchesFavourite && matchesPreparationTime;
+                        // AND logic: All conditions must be true
+                        return matchesName && matchesCategory && matchesDifficulty && matchesCriteria && matchesPreparationTime;
                     } else {
-                        // Logique OR : au moins une des conditions doit être vraie
-                        // Si toutes les conditions sont null, on considère que tout correspond
+                        // OR logic: At least one condition must be true
+                        // If all conditions are null, return all recipes
                         return (name != null && matchesName)
                                 || (category != null && matchesCategory)
                                 || (difficulty != null && matchesDifficulty)
                                 || (criteria != null && matchesCriteria)
-                                || (favourite != null && matchesFavourite)
-                                || (maxPreparationTime != null && matchesPreparationTime);
+                                || (maxPreparationTime != null && matchesPreparationTime)
+                                || (name == null && category == null && difficulty == null && criteria == null && maxPreparationTime == null);
                     }
                 })
                 .toList();
     }
+
 
     @Override
     public Map<String, List<Recipe>> suggestRecipes(List<Ingredient> availableIngredients) {

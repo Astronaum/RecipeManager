@@ -18,7 +18,6 @@ public interface RecipeIDAO {
             Recipe.Category category,
             Recipe.Difficulty difficulty,
             Recipe.Criteria criteria,
-            Boolean favourite,
             Integer maxPreparationTime,
             boolean useAndLogic
     );

@@ -218,69 +218,63 @@ public class RecipesView extends InteractiveView implements InitializableView{
 
     @FXML
     private void onSearchRecipes() {
-
-        // Récupérer les valeurs des champs de recherche
+        // Retrieve search parameter values from the view
         String name = searchNameField.getText().trim();
         Recipe.Category category = categoryComboBox.getValue();
         Recipe.Difficulty difficulty = difficultyComboBox.getValue();
         Recipe.Criteria criteria = criteriaComboBox.getValue();
-        Boolean favoriteOnly = null;
         Integer maxPrepTime = null;
 
-        // Vérifier si le champ de temps maximum de préparation est valide
+        // Validate and parse max preparation time
         if (!maxPrepTimeField.getText().isEmpty()) {
             try {
                 maxPrepTime = Integer.parseInt(maxPrepTimeField.getText().trim());
             } catch (NumberFormatException e) {
-                // Afficher un message ou journaliser une erreur si nécessaire
                 System.err.println("Invalid preparation time input. Ignoring this filter.");
             }
         }
 
-        // Afficher ce que la méthode récupère de la vue
+        // Determine if AND logic is selected
+        boolean useAndLogic = andRadioButton.isSelected();
+
+        // Log the search parameters
         System.out.println("Search Parameters:");
         System.out.println("Name: " + (name.isEmpty() ? "null" : name));
         System.out.println("Category: " + (category != null ? category : "null"));
         System.out.println("Difficulty: " + (difficulty != null ? difficulty : "null"));
         System.out.println("Criteria: " + (criteria != null ? criteria : "null"));
-        System.out.println("Favorites Only: " + favoriteOnly);
         System.out.println("Max Preparation Time: " + (maxPrepTime != null ? maxPrepTime : "null"));
-        System.out.println("Use AND Logic: " + andRadioButton.isSelected());
+        System.out.println("Use AND Logic: " + useAndLogic);
 
-        // Effacer les anciennes données de la table et de la liste
+        // Clear previous results
         recipesTable.getItems().clear();
         recipesList.clear();
 
-        // Déterminer si la logique AND ou OR doit être utilisée
-        boolean useAndLogic = andRadioButton.isSelected();
-
-        // Appeler la méthode filter avec les valeurs récupérées
+        // Initialize filteredRecipes
         List<Recipe> filteredRecipes;
-        if (name.isEmpty() && category == null && difficulty == null && favoriteOnly == null && maxPrepTime == null) {
+
+        // Handle the case where all parameters are null/empty
+        if (name.isEmpty() && category == null && difficulty == null && criteria == null && maxPrepTime == null) {
             if (useAndLogic) {
-                // Logique AND : tout est vide -> aucun résultat
-                filteredRecipes = new ArrayList<>(); // Liste vide
+                // AND logic with no criteria -> return an empty list
+                filteredRecipes = new ArrayList<>();
             } else {
-                // Logique OR : tout est vide -> obtenir toutes les recettes
+                // OR logic with no criteria -> return all recipes
                 filteredRecipes = recipeDAO.getAll();
             }
         } else {
-            // Appeler la méthode filter avec les valeurs récupérées
+            // Filter recipes based on provided parameters
             filteredRecipes = recipeDAO.filter(
-                    name.isEmpty() ? null : name, // Null si aucun nom n'est fourni
-                    category,                     // Catégorie (peut être null)
+                    name.isEmpty() ? null : name,
+                    category,
                     difficulty,
                     criteria,
-                    favoriteOnly,                 // Filtrer par favoris (peut être null)
-                    maxPrepTime,                  // Temps max de préparation (peut être null)
-                    useAndLogic                   // Logique (AND ou OR)
+                    maxPrepTime,
+                    useAndLogic
             );
         }
 
-        recipesTable.getItems().clear();
-        recipesList.clear();
-
-        // Afficher les recettes filtrées dans les logs
+        // Log the filtered recipes
         System.out.println("Filtered Recipes:");
         if (filteredRecipes.isEmpty()) {
             System.out.println("No recipes match the search criteria.");
@@ -290,18 +284,17 @@ public class RecipesView extends InteractiveView implements InitializableView{
                         ", Name: " + recipe.getName() +
                         ", Category: " + recipe.getCategory() +
                         ", Difficulty: " + recipe.getDifficulty() +
-                        ", Criteria: " + recipe.getCriteria()+
+                        ", Criteria: " + recipe.getCriteria() +
                         ", Preparation Time: " + recipe.getPreparationTime() +
                         ", Favourite: " + recipe.isFavourite());
             });
         }
 
-        // Ajouter les résultats filtrés dans la liste et mettre à jour la table
-        recipesTable.getItems().clear();
-        recipesList.clear();
+        // Update the table and list with filtered results
         recipesList.setAll(filteredRecipes);
         recipesTable.setItems(recipesList);
     }
+
 
 
     private void refreshRecipesTable() {
